@@ -51,8 +51,6 @@ export interface ExperienceTimings {
   characterMs: number | null;
 }
 
-const yieldToMain = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
-
 const STILL: PokoAnimState = { scrubs: [], idle: 0, blink: false, look: 0 };
 
 export class Experience {
@@ -172,7 +170,6 @@ export class Experience {
     const exp = new Experience(opts);
     opts.scroll.snap();
     exp.resize();
-    if (!new URLSearchParams(location.search).has('nowarmup')) await exp.warmUp();
     exp.tick(0, performance.now());
     exp.timings.firstFrameMs = performance.now() - start;
     if (opts.debug) exp.installDebugApi();
@@ -200,47 +197,6 @@ export class Experience {
       }
     });
     return exp;
-  }
-
-  /**
-   * Compile every shader program before the first frame, in parallel where the
-   * driver supports KHR_parallel_shader_compile. Without this, the first
-   * render compiles ~15 programs synchronously: the single longest task on load.
-   */
-  private async warmUp(): Promise<void> {
-    // A program's compile cost is paid on its first use, when three.js reflects
-    // its uniforms (a synchronous wait for the link in Chrome's GPU process).
-    // Pay it object by object, rendering each alone into the scene's own HDR
-    // target (the same program variant the real frame uses) and yielding in
-    // between: many short tasks instead of one long one. (A scene-wide
-    // compileAsync() would be ideal with KHR_parallel_shader_compile, but
-    // without that extension it compiles everything in one blocking call.)
-    this.engine.update(this.renderer, 0);
-    await yieldToMain();
-    const objects: THREE.Object3D[] = [];
-    this.scene.traverse((o) => {
-      if ((o as THREE.Mesh).isMesh || (o as THREE.Points).isPoints) objects.push(o);
-    });
-    const visible = objects.map((o) => o.visible);
-    // Programs compile the same whatever the target size, so draw into a 1 × 1
-    // target of the same format and MSAA: a warm-up render must not cost a real
-    // frame. (Rendering into the scene target, even with a 1 × 1 viewport,
-    // still resolved its full-size multisample buffer after every object.)
-    const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: this.post.target.samples });
-    const shadowAuto = this.renderer.shadowMap.autoUpdate;
-    for (const only of objects) {
-      for (const o of objects) o.visible = o === only;
-      // Shadow depth programs compile on the pass that draws the shadow caster.
-      this.renderer.shadowMap.autoUpdate = (only as THREE.Mesh).castShadow;
-      this.renderer.setRenderTarget(target);
-      this.renderer.render(this.scene, this.camera);
-      await yieldToMain();
-    }
-    this.renderer.shadowMap.autoUpdate = shadowAuto;
-    target.dispose();
-    objects.forEach((o, i) => (o.visible = visible[i]));
-    this.renderer.setRenderTarget(null);
-    await this.post.compile(yieldToMain);
   }
 
   // ------------------------------------------------------------------ frame

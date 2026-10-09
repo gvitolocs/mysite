@@ -454,10 +454,12 @@ the browser.
   3. Stage 3 is the Blender character (94 KB, meshopt), which replaces the
      voxel Poko seamlessly when it arrives.
   Everything is content-hashed and served `immutable`.
-* **Shader warm-up.** Programs are compiled object by object, yielding in
-  between. In production, three.js's synchronous shader status queries are
-  skipped, because each is a blocking round trip to Chrome's GPU process. See
-  the report for what this did and did not achieve on SwiftShader.
+* **Shader compilation.** In production, three.js's synchronous shader status
+  queries are skipped, because each is a blocking round trip to Chrome's GPU
+  process. The Blender character's materials are compiled before it is swapped
+  in. An object-by-object warm-up pass was built and measured, then
+  **removed**: it trimmed about 25 % of blocking time on the low tier but
+  made the high tier 6–8× slower to its first frame (A/B in the report).
 * **Disposal.** `Experience.dispose()` releases every geometry, material,
   texture and render target. An e2e test cycles all quality tiers and asserts
   that GPU resource counts do not grow.

@@ -45,8 +45,8 @@ void main() {
 
 export class VoxelCompute {
   readonly target: THREE.WebGLRenderTarget;
-  readonly scene = new THREE.Scene();
-  readonly camera = new THREE.Camera();
+  private readonly scene = new THREE.Scene();
+  private readonly camera = new THREE.Camera();
   private readonly material: THREE.RawShaderMaterial;
   private readonly geometry: THREE.BufferGeometry;
 

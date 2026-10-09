@@ -170,7 +170,7 @@ async function story(page) {
 }
 
 const contextOptions = mobile ? { ...devices['Pixel 7'] } : { viewport: { width: 1440, height: 900 } };
-const target = experience ? `${url}${url.includes('?') ? '&' : '?'}debug${opt('quality') ? `&quality=${opt('quality')}` : ''}${has('--nowarmup') ? '&nowarmup' : ''}` : url;
+const target = experience ? `${url}${url.includes('?') ? '&' : '?'}debug${opt('quality') ? `&quality=${opt('quality')}` : ''}` : url;
 const report = { label, url: target, mobile, network: network ?? 'none', date: new Date().toISOString(), environment: 'headless Chromium 141 (Playwright 1.56.1), SwiftShader software WebGL, no GPU; loopback server' };
 
 const ctx = await browser.newContext(contextOptions);

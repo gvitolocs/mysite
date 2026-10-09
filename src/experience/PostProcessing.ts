@@ -264,18 +264,6 @@ export class PostProcessing {
     return passes + 1;
   }
 
-  /** Compile every pass's program ahead of the first frame. */
-  async compile(between: () => Promise<void>): Promise<void> {
-    const holder = new THREE.Scene();
-    holder.add(this.quad);
-    for (const m of [this.prefilter, this.downMat, this.upMat, this.composite]) {
-      this.quad.material = m;
-      await this.renderer.compileAsync(holder, this.camera);
-      await between();
-    }
-    holder.remove(this.quad);
-  }
-
   dispose(): void {
     this.scene.dispose();
     for (const rt of [...this.down, ...this.up]) rt.dispose();
