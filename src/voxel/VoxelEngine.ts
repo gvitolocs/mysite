@@ -141,6 +141,7 @@ export class VoxelEngine {
       uVibrate: { value: 0 },
       uGlow: { value: 0 },
       uIdle: { value: 0 },
+      uHideRigged: { value: 0 },
       uTime: { value: 0 },
       uBoneT: { value: identityBones() },
       uBoneQ: { value: identityBones().map((v) => v.set(0, 0, 0, 1)) },
@@ -157,6 +158,7 @@ export class VoxelEngine {
       uRayDir: { value: new THREE.Vector3(0, 0, -1) },
       uPush: { value: new THREE.Vector2(0, 0.6) },
       uRipple: { value: new THREE.Vector4(0, 0, 0, -1) },
+      uCameraPos: { value: new THREE.Vector3(0, 0, 100) },
     };
 
     this.compute = VoxelCompute.isSupported(renderer) ? new VoxelCompute(this.uniforms) : null;
@@ -239,6 +241,11 @@ export class VoxelEngine {
     }
   }
 
+  /** While the skinned GLB draws Poko, hide the voxels the rig places. */
+  setHideRigged(hide: boolean): void {
+    this.uniforms.uHideRigged.value = hide ? 1 : 0;
+  }
+
   setPointer(origin: THREE.Vector3, dir: THREE.Vector3, strength: number, radius: number): void {
     (this.uniforms.uRayOrigin.value as THREE.Vector3).copy(origin);
     (this.uniforms.uRayDir.value as THREE.Vector3).copy(dir);
@@ -249,6 +256,10 @@ export class VoxelEngine {
     const r = this.uniforms.uRipple.value as THREE.Vector4;
     if (origin) r.set(origin.x, origin.y, origin.z, age);
     else r.w = -1;
+  }
+
+  setCamera(position: THREE.Vector3): void {
+    (this.uniforms.uCameraPos.value as THREE.Vector3).copy(position);
   }
 
   /** Run the compute pass. Call once per rendered frame, before rendering the scene. */

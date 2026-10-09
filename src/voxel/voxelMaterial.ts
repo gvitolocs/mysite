@@ -36,8 +36,15 @@ float voxelMetalness(float id) {
   if (id < 4.5) return 0.6;
   return 0.35;
 }
-vec3 voxelEmissive(float id, vec3 color) {
-  if (id > 2.5 && id < 3.5) return color * 3.2;
+uniform float uTime;
+// Cyan "data" voxels carry pulses that travel through space: brightness is a
+// wave over world position and time, so links in the systems world look busy
+// without any per-voxel state.
+vec3 voxelEmissive(float id, vec3 color, vec3 world) {
+  if (id > 2.5 && id < 3.5) {
+    float wave = 0.5 + 0.5 * sin(uTime * 3.2 - dot(world, vec3(2.1, 2.9, 1.7)));
+    return color * (1.1 + 3.4 * pow(wave, 6.0));
+  }
   if (id > 3.5 && id < 4.5) return color * 1.6;
   return vec3(0.0);
 }
@@ -137,18 +144,18 @@ export function createVoxelMaterial(opts: VoxelMaterialOptions): THREE.MeshStand
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms);
     shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', `#include <common>\n${vertexPrelude(inline)}\nvarying vec3 vVoxelColor;\nflat varying float vVoxelMat;\nvarying float vVoxelGlow;`)
+      .replace('#include <common>', `#include <common>\n${vertexPrelude(inline)}\nvarying vec3 vVoxelColor;\nflat varying float vVoxelMat;\nvarying float vVoxelGlow;\nvarying vec3 vVoxelWorld;`)
       .replace(
         '#include <beginnormal_vertex>',
         `VoxelXform vox = voxelXform();
-        vVoxelColor = vox.color; vVoxelMat = vox.mat; vVoxelGlow = vox.glow;
+        vVoxelColor = vox.color; vVoxelMat = vox.mat; vVoxelGlow = vox.glow; vVoxelWorld = vox.pos;
         vec3 objectNormal = normalize(qrotate(vox.quat, normal / max(vox.scale, vec3(1e-4))));`,
       )
       .replace('#include <begin_vertex>', 'vec3 transformed = vox.pos + qrotate(vox.quat, position * uVoxelSize * vox.scale);');
     shader.fragmentShader = shader.fragmentShader
       .replace(
         '#include <common>',
-        `#include <common>\n${MATERIAL_TABLE}\n${BEVEL}\nuniform float uGlowBoost;\nvarying vec3 vVoxelColor;\nflat varying float vVoxelMat;\nvarying float vVoxelGlow;`,
+        `#include <common>\n${MATERIAL_TABLE}\n${BEVEL}\nuniform float uGlowBoost;\nvarying vec3 vVoxelColor;\nflat varying float vVoxelMat;\nvarying float vVoxelGlow;\nvarying vec3 vVoxelWorld;`,
       )
       .replace('#include <color_fragment>', 'diffuseColor.rgb = vVoxelColor * voxelSeam(vUv);')
       .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = voxelRoughness(vVoxelMat);')
@@ -156,7 +163,7 @@ export function createVoxelMaterial(opts: VoxelMaterialOptions): THREE.MeshStand
       .replace('#include <normal_fragment_maps>', 'normal = voxelBevelNormal(normal, vViewPosition, vUv);')
       .replace(
         '#include <emissivemap_fragment>',
-        '#include <emissivemap_fragment>\ntotalEmissiveRadiance += voxelEmissive(vVoxelMat, vVoxelColor) + vVoxelColor * vVoxelGlow * uGlowBoost;',
+        '#include <emissivemap_fragment>\ntotalEmissiveRadiance += voxelEmissive(vVoxelMat, vVoxelColor, vVoxelWorld) + vVoxelColor * vVoxelGlow * uGlowBoost;',
       );
   };
   material.customProgramCacheKey = () => `voxel-b-${inline ? 'inline' : 'texture'}`;

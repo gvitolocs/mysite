@@ -8,8 +8,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { buildPokoModel } from '../src/character/pokoVoxelizer.ts';
 import { PokoRig } from '../src/character/PokoRig.ts';
 import { PokoAnimationController, type ClipName } from '../src/character/PokoAnimationController.ts';
-import { buildPokoPool } from '../src/voxel/formations/poko.ts';
-import { buildCloud } from '../src/voxel/formations/cloud.ts';
+import { buildFormations } from '../src/voxel/formations/index.ts';
 import { DEFAULT_MORPH, VoxelEngine } from '../src/voxel/VoxelEngine.ts';
 import { patchSkinnedVoxelMaterial } from '../src/voxel/voxelMaterial.ts';
 import { Environment } from '../src/experience/Environment.ts';
@@ -44,13 +43,15 @@ const cams: Record<string, [number, number, number]> = {
   wide: [5, 4, 14],
 };
 camera.position.set(...(cams[q.get('cam') ?? 'tq'] ?? cams.tq));
-camera.lookAt(0, num('ty', 1.2), 0);
+if (q.has('cx')) camera.position.set(num('cx', 0), num('cy', 1.5), num('cz', 8));
+camera.lookAt(num('lx', 0), num('ty', 1.2), num('lz', 0));
 
 const t0 = performance.now();
 const model = buildPokoModel();
-const poko = buildPokoPool(model);
-const cloud = buildCloud(poko.formation, poko.center);
-const engine = new VoxelEngine(renderer, [poko.formation, cloud], poko.staticData, poko.center, model.bones.length);
+const set = buildFormations(model);
+const poko = { center: set.pokoCenter };
+const engine = new VoxelEngine(renderer, set.formations, set.staticData, set.pokoCenter, model.bones.length);
+console.log('counts', JSON.stringify(set.counts));
 const buildMs = performance.now() - t0;
 scene.add(engine.mesh);
 
@@ -62,7 +63,7 @@ const rep = q.get('rep') ?? 'B';
 async function loadGlb() {
   const loader = new GLTFLoader();
   loader.setMeshoptDecoder(MeshoptDecoder);
-  const gltf = await loader.loadAsync('/assets/poko/poko.glb');
+  const gltf = await loader.loadAsync(new URL('../src/assets/poko/poko.glb', import.meta.url).href);
   gltf.scene.traverse((o) => {
     const m = o as THREE.SkinnedMesh;
     if (m.isSkinnedMesh) {
@@ -100,7 +101,8 @@ function frame(time: number) {
     ...DEFAULT_MORPH,
     from: q.get('from') ?? 'poko',
     to: q.get('to') ?? 'poko',
-    toPlacement: { position: poko.center, quaternion: [0, 0, 0, 1], scale: 1 },
+    fromPlacement: { position: [num('fx', 0), num('fy', 0), num('fz', 0)], quaternion: [0, Math.sin(num('fyaw', 0) / 2), 0, Math.cos(num('fyaw', 0) / 2)], scale: num('fs', 1) },
+    toPlacement: { position: [num('tx', poko.center[0]), num('ty2', poko.center[1]), num('tz', 0)], quaternion: [0, Math.sin(num('yaw', 0) / 2), 0, Math.cos(num('yaw', 0) / 2)], scale: num('ts', 1) },
     t: num('t', 0),
     spread: num('spread', 0.7),
     delayWeights: { axis: 0, depth: 1, seed: 0.6 },
@@ -116,6 +118,7 @@ function frame(time: number) {
     transitScale: 0.8,
     glow: num('glow', 0.5),
   });
+  engine.setHideRigged(q.has('hiderig'));
   engine.mesh.visible = rep !== 'A';
   if (rig.skinnedScene) rig.skinnedScene.visible = rep !== 'B';
   env.apply(envState, time, camera.position);

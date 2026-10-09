@@ -1,0 +1,375 @@
+/* The cinematic home page. */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100lvh;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 70%, #0b1226 0%, #04060c 60%);
+  transition: opacity 0.6s var(--ease);
+}
+
+/* Static mode: the same page, pixel-art Poko instead of the canvas. */
+.static-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: none;
+  place-items: center;
+  pointer-events: none;
+  background: radial-gradient(90% 70% at 50% 45%, #121b38 0%, #04060c 70%);
+}
+.static-poko {
+  width: min(46vw, 260px);
+  height: auto;
+  margin-bottom: 18vh;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 18px 40px rgba(255, 203, 3, 0.16));
+}
+html.static .stage {
+  opacity: 0;
+}
+html.static .static-stage {
+  display: grid;
+}
+html:not(.js) .stage {
+  display: none;
+}
+html:not(.js) .static-stage {
+  display: grid;
+}
+
+/* ---- story ------------------------------------------------------------ */
+.story {
+  position: relative;
+  z-index: 2;
+}
+.chapter {
+  position: relative;
+  height: calc(var(--len) * 100svh);
+}
+.chapter__sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  padding: 96px var(--gutter) max(clamp(28px, 7vh, 72px), env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+
+.overlay {
+  max-width: 34rem;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.7s var(--ease),
+    visibility 0s linear 0.55s;
+  visibility: hidden;
+}
+.overlay.is-visible,
+.overlay:focus-within,
+html:not(.js) .overlay,
+html.static .overlay {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.7s var(--ease);
+}
+
+.overlay .kicker {
+  margin-bottom: 14px;
+}
+.overlay__title {
+  font-family: var(--serif);
+  font-size: clamp(2.6rem, 6.4vw, 5.6rem);
+  line-height: 0.95;
+  letter-spacing: -0.012em;
+  margin-bottom: 18px;
+  text-wrap: balance;
+}
+.overlay__body {
+  max-width: 30rem;
+  font-size: clamp(1rem, 1.25vw, 1.12rem);
+  line-height: 1.5;
+  color: var(--ink-dim);
+  text-wrap: pretty;
+}
+.overlay__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.overlay__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(4, 6, 12, 0.42);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: border-color 0.25s, background 0.25s, color 0.25s;
+}
+.overlay__links a:hover {
+  border-color: rgba(255, 210, 63, 0.6);
+  background: rgba(255, 203, 3, 0.08);
+}
+.overlay__links .arrow {
+  color: var(--gold-soft);
+}
+
+/* Intro: the name sits low and centred under Poko. */
+.chapter--awakening .chapter__sticky {
+  justify-content: center;
+  text-align: center;
+}
+.chapter--awakening .overlay {
+  max-width: 46rem;
+}
+.chapter--awakening .overlay__body {
+  margin-inline: auto;
+}
+.chapter--awakening .overlay__title {
+  font-size: clamp(3rem, 9vw, 7.5rem);
+}
+.scroll-hint {
+  margin-top: 26px;
+  font-family: var(--pixel);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.scroll-hint span::after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 4px;
+  margin: 10px auto 0;
+  background: var(--gold);
+  box-shadow: 0 6px 0 var(--gold), 0 12px 0 rgba(255, 203, 3, 0.5);
+  animation: hint 1.8s steps(4) infinite;
+}
+@keyframes hint {
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* Project worlds: text on the left third, the sculpture fills the rest. */
+.chapter--pokoin .overlay__title,
+.chapter--cardrail .overlay__title,
+.chapter--systems .overlay__title {
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+}
+
+/* Finale: the voxel name is in 3D; the DOM carries statement and contact. */
+.chapter--finale .chapter__sticky {
+  justify-content: center;
+  text-align: center;
+}
+.chapter--finale .overlay__title {
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-style: italic;
+  margin-bottom: 10px;
+}
+.chapter--finale .overlay__body {
+  margin-inline: auto;
+}
+.chapter--finale .overlay__links {
+  justify-content: center;
+}
+
+/* Legibility over bright frames on small screens: a soft scrim behind text. */
+@media (max-width: 760px) {
+  .chapter__sticky::before {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 62%;
+    background: linear-gradient(to top, rgba(4, 6, 12, 0.88), rgba(4, 6, 12, 0));
+    pointer-events: none;
+  }
+  .overlay {
+    position: relative;
+  }
+  .overlay__links a {
+    padding: 10px 14px 11px;
+  }
+}
+
+/* ---- chapter index ------------------------------------------------------ */
+.chapter-index {
+  position: fixed;
+  right: var(--gutter);
+  top: 50%;
+  z-index: 10;
+  transform: translateY(-50%);
+}
+.chapter-index ol {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chapter-index a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 5px 0;
+  text-decoration: none;
+  color: var(--muted);
+  font-family: var(--pixel);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.chapter-index__label {
+  order: -1;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.chapter-index__tick {
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  opacity: 0.45;
+  transition: background 0.3s, opacity 0.3s, transform 0.3s var(--ease);
+}
+.chapter-index a:hover .chapter-index__label,
+.chapter-index a:focus-visible .chapter-index__label,
+.chapter-index a[aria-current] .chapter-index__label {
+  opacity: 1;
+  transform: none;
+}
+.chapter-index a[aria-current] {
+  color: var(--ink);
+}
+.chapter-index a[aria-current] .chapter-index__tick {
+  background: var(--gold);
+  opacity: 1;
+  transform: scale(1.35);
+}
+@media (max-width: 760px) {
+  .chapter-index {
+    top: auto;
+    bottom: max(14px, env(safe-area-inset-bottom));
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+  }
+}
+
+/* ---- loader & controls --------------------------------------------------- */
+.loader {
+  position: fixed;
+  left: var(--gutter);
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--pixel);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: opacity 0.6s var(--ease);
+}
+.loader.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.loader__pixels {
+  display: inline-flex;
+  gap: 3px;
+}
+.loader__pixels i {
+  width: 5px;
+  height: 5px;
+  background: var(--gold);
+  animation: pixel 0.9s steps(2) infinite;
+}
+.loader__pixels i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.loader__pixels i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes pixel {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.controls {
+  position: fixed;
+  right: var(--gutter);
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 15;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100vw - 2 * var(--gutter));
+}
+.control {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(4, 6, 12, 0.5);
+  color: var(--ink-dim);
+  font: inherit;
+  font-family: var(--pixel);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.control:hover {
+  color: var(--ink);
+  border-color: rgba(255, 210, 63, 0.5);
+}
+.controls__note {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+@media (max-width: 760px) {
+  .controls {
+    top: max(54px, calc(env(safe-area-inset-top) + 46px));
+    bottom: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint span::after,
+  .loader__pixels i {
+    animation: none;
+  }
+}
+html.reduced-motion .overlay {
+  transform: none;
+  transition: opacity 0.2s linear;
+}

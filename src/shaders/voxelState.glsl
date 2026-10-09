@@ -39,6 +39,7 @@ uniform float uTransitScale;             // voxel scale multiplier at mid-flight
 uniform float uVibrate;                  // shiver amplitude just before a voxel departs
 uniform float uGlow;                     // emissive kick while in flight
 uniform float uIdle;                     // ambient drift amplitude (time based, small)
+uniform float uHideRigged;               // 1 while the skinned GLB draws Poko: hide rig-bound voxels
 uniform float uTime;
 
 // Poko's rig, decomposed skinning matrices (bone world * inverse bind).
@@ -61,6 +62,7 @@ uniform vec3 uRayOrigin;
 uniform vec3 uRayDir;
 uniform vec2 uPush;                      // x strength, y radius
 uniform vec4 uRipple;                    // xyz origin, w age in seconds (< 0: inactive)
+uniform vec3 uCameraPos;                 // voxels shrink as they approach the lens
 
 struct Endpoint {
   vec3 pos;
@@ -68,6 +70,7 @@ struct Endpoint {
   vec3 scale;
   vec3 color;
   float mat;
+  float rig;     // 1 if placed by Poko's skeleton
 };
 
 struct VoxelState {
@@ -107,6 +110,7 @@ Endpoint pokoEndpoint(ivec2 tc, vec4 st) {
   e.scale = bs * vec3(1.0, 1.0, zScale) * rest.w;
   e.color = col.rgb;
   e.mat = floor(col.a * 255.0 + 0.5);
+  e.rig = 1.0;
   return e;
 }
 
@@ -126,6 +130,7 @@ Endpoint streamEndpoint(float seedA, float seedB, float cluster) {
   e.scale = vec3(uStream.w * (0.55 + 0.45 * seedB) * edge);
   e.color = vec3(0.0);   // keeps the colour of the formation it came from (see below)
   e.mat = -1.0;
+  e.rig = 0.0;
   return e;
 }
 
@@ -133,6 +138,8 @@ Endpoint formationEndpoint(int layer, vec4 T, vec4 Q, ivec2 tc, vec4 st) {
   if (layer == LAYER_POKO) return pokoEndpoint(tc, st);
   if (layer == LAYER_STREAM) return streamEndpoint(st.g, st.b, st.a);
   vec4 p = texelFetch(uFormPos, ivec3(tc, layer), 0);
+  // scale = -1 marks a rig-bound voxel (e.g. Poko inside the finale formation).
+  if (p.w < -0.5) return pokoEndpoint(tc, st);
   vec4 col = texelFetch(uFormCol, ivec3(tc, layer), 0);
   Endpoint e;
   e.pos = T.xyz + qrotate(Q, p.xyz * T.w);
@@ -140,6 +147,7 @@ Endpoint formationEndpoint(int layer, vec4 T, vec4 Q, ivec2 tc, vec4 st) {
   e.scale = vec3(p.w * T.w);
   e.color = col.rgb;
   e.mat = floor(col.a * 255.0 + 0.5);
+  e.rig = 0.0;
   return e;
 }
 
@@ -226,5 +234,9 @@ VoxelState computeVoxel(int id) {
   s.color = mix(a.color, b.color, smoothstep(0.3, 0.7, local));
   s.mat = local < 0.5 ? a.mat : b.mat;
   s.glow = clamp(uGlow * bl * (0.4 + 0.6 * seedB), 0.0, 0.99);
+  if (uHideRigged > 0.5 && a.rig > 0.5 && b.rig > 0.5) s.scale = vec3(0.0);
+  // A 10 cm cube 20 cm from the lens fills the screen. Shrink voxels that pass
+  // close to the camera instead of letting them flash across the frame.
+  s.scale *= smoothstep(0.35, 1.6, distance(p, uCameraPos));
   return s;
 }

@@ -90,7 +90,7 @@ export class Environment {
     this.fog = new THREE.Fog(0x070a16, 14, 46);
 
     // Floor: dark lacquer with a faint pixel grid that fades away from the stage.
-    const floorMat = new THREE.MeshStandardMaterial({ color: 0x04050a, roughness: 0.5, metalness: 0.0, envMapIntensity: 0.3, transparent: true });
+    const floorMat = new THREE.MeshStandardMaterial({ color: 0x04050a, roughness: 0.78, metalness: 0.0, envMapIntensity: 0.35, transparent: true });
     floorMat.onBeforeCompile = (shader) => {
       Object.assign(shader.uniforms, this.floorUniforms);
       shader.vertexShader = shader.vertexShader

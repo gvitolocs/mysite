@@ -61,19 +61,21 @@ export class PokoRig {
     if (!skinned) return false;
     const skeleton = (skinned as THREE.SkinnedMesh).skeleton;
     const bones: THREE.Bone[] = [];
-    const inverses: THREE.Matrix4[] = [];
     for (const name of BONE_NAMES) {
-      const index = skeleton.bones.findIndex((b) => b.name === name);
-      if (index < 0) {
+      const bone = skeleton.bones.find((b) => b.name === name);
+      if (!bone) {
         console.warn(`[poko] GLB is missing bone "${name}"; keeping the procedural rig.`);
         return false;
       }
-      bones.push(skeleton.bones[index]);
-      inverses.push(skeleton.boneInverses[index]);
+      bones.push(bone);
     }
     // Rest pivots must match the voxelizer, otherwise A and B would disagree.
+    // Compare bone rest positions in world space (the GLB is still in its rest
+    // pose here). The GLB's own inverse bind matrices are not comparable: the
+    // compressor folds vertex dequantisation into them.
+    scene.updateMatrixWorld(true);
     for (let i = 0; i < bones.length; i++) {
-      const glb = new THREE.Vector3().setFromMatrixPosition(inverses[i].clone().invert());
+      const glb = new THREE.Vector3().setFromMatrixPosition(bones[i].matrixWorld);
       const ours = new THREE.Vector3().setFromMatrixPosition(this.boneInverses[i].clone().invert());
       if (glb.distanceTo(ours) > 1e-3) {
         console.warn(`[poko] Bone "${BONE_NAMES[i]}" pivot differs between GLB and voxelizer.`);
@@ -83,8 +85,9 @@ export class PokoRig {
     this.root.remove(this.root.getObjectByName('ProceduralRig')!);
     this.root.add(scene);
     this.skinnedScene = scene;
+    // Keep our inverse bind matrices: they are defined in the same space as the
+    // voxel rest positions, which is all Representation B needs.
     this.bones = bones;
-    this.boneInverses = inverses;
     return true;
   }
 

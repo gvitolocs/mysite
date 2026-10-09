@@ -1,7 +1,7 @@
 """Build Poko's editable Blender scene and the runtime GLB.
 
     npm run poko:voxels                      # TypeScript voxelizer -> blender/data/poko_voxels.json
-    python blender/scripts/build_poko.py     # -> blender/poko_genesis.blend + public/assets/poko/poko.glb
+    python blender/scripts/build_poko.py     # -> blender/poko_genesis.blend + blender/exports/poko_raw.glb
 
 Runs inside Blender (`blender -b -P build_poko.py`) or with the `bpy` wheel
 (`pip install bpy==5.1.2`). Everything is generated from the voxel JSON, so the
@@ -34,7 +34,7 @@ from mathutils import Euler, Vector
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "blender/data/poko_voxels.json"
 BLEND = ROOT / "blender/poko_genesis.blend"
-GLB = ROOT / "public/assets/poko/poko.glb"
+GLB = ROOT / "blender/exports/poko_raw.glb"  # uncompressed; npm run poko:pack writes src/assets/poko/poko.glb
 RENDERS = ROOT / "blender/renders"
 SCALE = 0.1
 FPS = 30
@@ -364,7 +364,7 @@ def stage_scene() -> None:
 
     # Same intent as the runtime rig in src/experience/Lighting.ts: warm key,
     # cool rim from behind, faint fill; gold needs large soft sources to read.
-    area("Key", (-2.2, -2.6, 3.2), (52, 0, -38), 900, 2.4, (1.0, 0.94, 0.86))
+    area("Key", (-2.2, -2.6, 3.2), (52, 0, -38), 600, 2.4, (1.0, 0.94, 0.86))
     area("Rim", (2.4, 2.2, 2.6), (-58, 0, 140), 700, 1.6, (0.62, 0.74, 1.0))
     area("Fill", (2.6, -2.4, 0.8), (78, 0, 48), 160, 3.0, (0.8, 0.86, 1.0))
 

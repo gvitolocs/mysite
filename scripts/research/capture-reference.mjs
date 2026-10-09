@@ -121,7 +121,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const slug = (u) => {
 	const x = new URL(u);
 	const p = x.pathname.replace(/\/+$/, '').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '');
-	return `${x.hostname.replace(/[^a-z0-9.]+/gi, '-')}${p ? '_' + p : ''}`;
+	const q = x.search.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 60);
+	return `${x.hostname.replace(/[^a-z0-9.]+/gi, '-')}${x.port ? '-' + x.port : ''}${p ? '_' + p : ''}${q ? '_' + q : ''}`;
 };
 const writeJSON = (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2));
 function quantiles(arr, qs = [0.5, 0.95, 0.99]) {
@@ -477,7 +478,10 @@ function pageInstrumentation(OPT) {
 			for (const [name, re] of TAGS) if (re.test(active)) tags.push(name);
 			for (const tg of tags) R.shaderTags[tg] = (R.shaderTags[tg] || 0) + 1;
 			// three.js programs carry their feature switches as #defines (USE_INSTANCING, USE_SHADOWMAP, ...)
-			const flags = Object.keys(defines).filter((d) => /^(USE_|TONE_MAPPING$|PHYSICAL$|STANDARD$|ENVMAP_TYPE_|DITHERING$|FLAT_SHADED$|DOUBLE_SIDED$|SHADOWMAP_TYPE_|NUM_DIR_LIGHTS$|NUM_POINT_LIGHTS$|NUM_SPOT_LIGHTS$|OPAQUE$|ALPHA)/.test(d) && defines[d] !== '0');
+			const flags = Object.keys(defines).filter((d) => /^(USE_|TONE_MAPPING$|\w+_TONE_MAPPING$|SRGB_TRANSFER$|SRGB_COLOR_SPACE$|PHYSICAL$|STANDARD$|ENVMAP_TYPE_|DITHERING$|FLAT_SHADED$|DOUBLE_SIDED$|SHADOWMAP_TYPE_|NUM_DIR_LIGHTS$|NUM_POINT_LIGHTS$|NUM_SPOT_LIGHTS$|OPAQUE$|ALPHA)/.test(d) && defines[d] !== '0');
+			// three.js defines every tone-mapping operator in its prelude; the selected one is the body of toneMapping()
+			const tm = active.match(/vec3\s+toneMapping\s*\(\s*vec3\s+color\s*\)\s*\{\s*return\s+(\w+)\s*\(/);
+			if (tm) flags.push('toneMapping=' + tm[1]);
 			for (const f of flags) R.shaderFlags[f] = (R.shaderFlags[f] || 0) + 1;
 			if (defines.SHADER_NAME) R.shaderNames[defines.SHADER_NAME] = (R.shaderNames[defines.SHADER_NAME] || 0) + 1;
 			let h = 0;

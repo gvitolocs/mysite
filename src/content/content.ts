@@ -8,7 +8,7 @@ export const site = {
   tagline: "Backend services, data pipelines and useful web products.",
   email: "gvitolocs@gmail.com",
   location: "Aarhus, Denmark",
-  avatarUrl: "/giuseppe-vitolo.jpg",
+  avatarUrl: "/giuseppe-vitolo-440.jpg",
   social: {
     github: "https://github.com/gvitolocs",
     linkedin: "https://www.linkedin.com/in/gvitolocs/",

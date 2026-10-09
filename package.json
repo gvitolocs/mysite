@@ -14,9 +14,11 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "poko:voxels": "node scripts/export-poko-voxels.ts",
-    "poko:blender": "python blender/scripts/build_poko.py && python blender/scripts/validate_glb.py public/assets/poko/poko.glb",
+    "poko:blender": "python blender/scripts/build_poko.py && npm run poko:pack",
     "cv:sync": "node scripts/sync-cv.mjs",
-    "perf": "node scripts/perf/measure.mjs"
+    "perf": "node scripts/perf/measure.mjs",
+    "poko:pack": "gltfpack -i blender/exports/poko_raw.glb -o src/assets/poko/poko.glb -cc -kn -km -kv && python blender/scripts/validate_glb.py src/assets/poko/poko.glb",
+    "poko:svg": "node scripts/build-poko-svg.ts"
   },
   "dependencies": {
     "solid-js": "1.9.15",
@@ -27,6 +29,7 @@
     "@types/node": "22.20.5",
     "@types/pngjs": "6.0.5",
     "@types/three": "0.186.0",
+    "gltfpack": "^1.3.0",
     "pngjs": "7.0.0",
     "typescript": "6.0.3",
     "vite": "8.3.1",
