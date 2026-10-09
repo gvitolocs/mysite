@@ -189,12 +189,15 @@ export class PostProcessing {
   }
 
   setQuality(q: QualitySettings): void {
-    if (this.scene.samples !== q.msaa) {
-      const { width, height } = this.scene;
-      this.scene.dispose();
-      this.scene = this.makeSceneTarget(width, height, q.msaa);
-    }
     this.bloomEnabled = q.bloom;
+  }
+
+  /** MSAA sample count of the HDR scene target (recreated only when it changes). */
+  setSamples(samples: number): void {
+    if (this.scene.samples === samples) return;
+    const { width, height } = this.scene;
+    this.scene.dispose();
+    this.scene = this.makeSceneTarget(width, height, samples);
   }
 
   setSize(width: number, height: number): void {

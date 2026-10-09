@@ -101,6 +101,7 @@ export class Experience {
       alpha: false,
       powerPreference: 'high-performance',
       stencil: false,
+      depth: false, // only the composite pass draws to the canvas; the scene has its own depth buffer
       preserveDrawingBuffer: Boolean(opts.debug),
     });
     this.renderer.shadowMap.enabled = q.shadows;
@@ -351,6 +352,9 @@ export class Experience {
     const ratio = Math.min(window.devicePixelRatio || 1, q.maxPixelRatio) * q.resolutionScale;
     this.renderer.setPixelRatio(ratio);
     this.renderer.setSize(w, h, false);
+    // At high pixel density the extra pixels already antialias; 4× MSAA on a
+    // half-float target at 2880×1800 would cost ~250 MB of GPU memory.
+    this.post.setSamples(ratio <= 1.25 ? q.msaa : 0);
     const size = this.renderer.getDrawingBufferSize(new THREE.Vector2());
     this.post.setSize(size.x, size.y);
     this.camera.aspect = w / h;
