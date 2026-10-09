@@ -169,7 +169,7 @@ export default function HeroField() {
       />
       <p
         ref={badge}
-        class="absolute bottom-4 left-5 z-10 font-mono text-[10px] uppercase tracking-[0.18em] text-muted/70 opacity-0 transition-opacity duration-700 data-[ready=true]:opacity-100 sm:left-6 lg:left-8"
+        class="absolute bottom-4 left-5 z-10 font-mono text-[10px] uppercase tracking-[0.18em] text-muted opacity-0 transition-opacity duration-700 data-[ready=true]:opacity-100 sm:left-6 lg:left-8"
       />
     </>
   );

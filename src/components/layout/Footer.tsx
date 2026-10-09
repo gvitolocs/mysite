@@ -15,7 +15,7 @@ export function Footer() {
           <p class="text-sm text-muted">
             © {year} {site.name}. {footer.note}
           </p>
-          <p class="mt-1 font-mono text-[11px] text-muted/70">
+          <p class="mt-1 font-mono text-[11px] text-muted">
             Built with Astro + SolidJS · hero particle field in Rust → WebAssembly
           </p>
         </div>
