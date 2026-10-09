@@ -1,0 +1,19 @@
+---
+import { getImage } from "astro:assets";
+import Base from "@/layouts/Base.astro";
+import { Hero } from "@/components/sections/Hero";
+import { About } from "@/components/sections/About";
+import { Footer } from "@/components/layout/Footer";
+import portraitSrc from "@/assets/giuseppe-vitolo.jpg";
+
+const p = await getImage({ src: portraitSrc, widths: [384, portraitSrc.width], format: "avif" });
+const portrait = { src: p.src, srcset: p.srcSet.attribute, width: 384, height: 384 };
+---
+
+<Base>
+  <main class="flex flex-1 flex-col">
+    <Hero portrait={portrait} />
+    <About />
+  </main>
+  <Footer />
+</Base>
