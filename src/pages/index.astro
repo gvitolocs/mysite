@@ -3,6 +3,11 @@ import { getImage } from "astro:assets";
 import Base from "@/layouts/Base.astro";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
+import { Experience } from "@/components/sections/Experience";
+import { Skills } from "@/components/sections/Skills";
+import { GuidingPrinciples } from "@/components/sections/GuidingPrinciples";
+import { Vision } from "@/components/sections/Vision";
+import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/layout/Footer";
 import portraitSrc from "@/assets/giuseppe-vitolo.jpg";
 
@@ -14,6 +19,12 @@ const portrait = { src: p.src, srcset: p.srcSet.attribute, width: 384, height: 3
   <main class="flex flex-1 flex-col">
     <Hero portrait={portrait} />
     <About />
+    <Experience />
+    {/* Projects: added in task P4 */}
+    <Skills />
+    <GuidingPrinciples />
+    <Vision />
+    <Contact />
   </main>
   <Footer />
 </Base>
