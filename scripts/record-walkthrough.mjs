@@ -17,7 +17,7 @@ import { tmpdir } from 'node:os';
 
 const [out, base = 'http://127.0.0.1:4180/', seconds = '24', size = '1280x720', quality = 'high'] = process.argv.slice(2);
 const [w, h] = size.split('x').map(Number);
-const fps = 30;
+const fps = Number(process.env.FPS ?? 30);
 const frames = Math.round(Number(seconds) * fps);
 const dir = join(tmpdir(), `poko-walkthrough-${Date.now()}`);
 mkdirSync(dir, { recursive: true });
@@ -29,6 +29,7 @@ await page.waitForFunction(() => window.__poko?.ready === true, null, { timeout:
 await page.waitForFunction(() => window.__poko.info().skinned === true, null, { timeout: 60_000 });
 // Hide the debug-only controls row for a clean frame.
 await page.addStyleTag({ content: '.controls{display:none!important}' });
+await page.evaluate(() => window.__poko.manual(true));
 
 // Pacing: linger on the hero states, move briskly through transitions.
 const ease = (t) => t * t * (3 - 2 * t);

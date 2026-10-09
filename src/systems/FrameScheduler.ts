@@ -24,11 +24,14 @@ export class FrameScheduler {
   state: 'active' | 'ambient' | 'asleep' = 'asleep';
   /** Disable sleeping (tests, recordings). */
   neverSleep = false;
+  /** Offline mode: the loop never runs; the owner renders frames explicitly. */
+  manual = false;
 
   constructor(private readonly callback: FrameCallback) {}
 
   /** Call on any input. Restarts the loop if it was asleep. */
   wake(): void {
+    if (this.manual) return;
     this.quiet = 0;
     if (!this.running) {
       this.running = true;

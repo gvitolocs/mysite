@@ -9,7 +9,7 @@ whole journey plays backward exactly.
 
 Live (current production): https://gvitolo.vercel.app/
 
-![Poko Genesis](docs/media/gallery/u0250.png)
+![Poko Genesis](docs/media/gallery/u0250.jpg)
 
 - Walkthrough video: [`docs/media/poko-genesis-walkthrough.mp4`](docs/media/poko-genesis-walkthrough.mp4)
 - Screenshot gallery: [`docs/media/gallery/`](docs/media/gallery/) (desktop), [`docs/media/mobile/`](docs/media/mobile/)

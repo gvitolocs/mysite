@@ -221,12 +221,22 @@ export class Experience {
       if ((o as THREE.Mesh).isMesh || (o as THREE.Points).isPoints) objects.push(o);
     });
     const visible = objects.map((o) => o.visible);
-    for (const target of objects) {
-      for (const o of objects) o.visible = o === target;
-      this.renderer.setRenderTarget(this.post.target);
+    // Programs compile the same whatever the target size, so draw into a 1 × 1
+    // target of the same format and MSAA: a warm-up render must not cost a real
+    // frame. (Rendering into the scene target, even with a 1 × 1 viewport,
+    // still resolved its full-size multisample buffer after every object.)
+    const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: this.post.target.samples });
+    const shadowAuto = this.renderer.shadowMap.autoUpdate;
+    for (const only of objects) {
+      for (const o of objects) o.visible = o === only;
+      // Shadow depth programs compile on the pass that draws the shadow caster.
+      this.renderer.shadowMap.autoUpdate = (only as THREE.Mesh).castShadow;
+      this.renderer.setRenderTarget(target);
       this.renderer.render(this.scene, this.camera);
       await yieldToMain();
     }
+    this.renderer.shadowMap.autoUpdate = shadowAuto;
+    target.dispose();
     objects.forEach((o, i) => (o.visible = visible[i]));
     this.renderer.setRenderTarget(null);
     await this.post.compile(yieldToMain);
@@ -386,6 +396,12 @@ export class Experience {
         this.tick(0, performance.now());
       },
       renderNow: () => this.tick(0, performance.now()),
+      /** Stop the frame loop entirely; frames are then rendered only by renderNow/setProgress (offline recording). */
+      manual: (on: boolean) => {
+        this.scheduler.manual = on;
+        if (on) this.scheduler.stop();
+        else this.scheduler.wake();
+      },
       info: () => ({
         progress: this.opts.scroll.value,
         chapter: CHAPTERS[this.frame.chapterIndex].id,
