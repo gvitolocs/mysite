@@ -1,10 +1,7 @@
-"use client";
-
-import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
+import { GitHubIcon } from "@/components/ui/TechIcon";
 import { site } from "@/data/content";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -16,121 +13,141 @@ const navLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
-export function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+/** The page's one eagerly hydrated island: scroll state, mobile menu and the active-section highlight. */
+export default function Navbar() {
+  const [open, setOpen] = createSignal(false);
+  const [scrolled, setScrolled] = createSignal(false);
+  const [active, setActive] = createSignal("");
 
-  useEffect(() => {
+  onMount(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
+    const onResize = () => setOpen(false);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
-    const onResize = () => setOpen(false);
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [open]);
+    window.addEventListener("keydown", onKey);
+
+    // A section is active while it crosses the middle band of the viewport.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) if (entry.isIntersecting) setActive(entry.target.id);
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
+    );
+    for (const l of navLinks) {
+      const section = document.getElementById(l.href.slice(1));
+      if (section) observer.observe(section);
+    }
+
+    onCleanup(() => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("keydown", onKey);
+      observer.disconnect();
+    });
+  });
+
+  const isActive = (href: string) => active() === href.slice(1);
 
   return (
     <header
-      className={cn(
+      class={cn(
         "fixed inset-x-0 top-0 z-[100] border-b transition-[background-color,border-color,backdrop-filter] duration-300",
-        scrolled
+        scrolled()
           ? "border-white/[0.1] bg-[color-mix(in_oklab,var(--background)_88%,transparent)] backdrop-blur-xl"
           : "border-transparent bg-[color-mix(in_oklab,var(--background)_70%,transparent)] backdrop-blur-md",
       )}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-6 lg:px-8">
-        <Link
+      <div aria-hidden="true" class="scroll-progress" />
+      <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-6 lg:px-8">
+        <a
           href="#hero"
-          className="font-display text-sm font-semibold tracking-tight text-foreground transition-colors hover:text-accent"
+          class="font-display text-sm font-semibold tracking-tight text-foreground transition-colors hover:text-accent"
         >
           {site.firstName}
-          <span className="text-muted">.</span>
-        </Link>
+          <span class="text-muted">.</span>
+        </a>
 
-        <ul className="hidden items-center gap-0.5 lg:flex">
-          {navLinks.map((l) => (
-            <li key={l.href}>
-              <Link
-                href={l.href}
-                className="rounded-full px-3 py-1.5 text-sm text-muted transition-colors hover:bg-white/[0.04] hover:text-foreground"
-              >
-                {l.label}
-              </Link>
-            </li>
-          ))}
+        <ul class="hidden items-center gap-0.5 lg:flex">
+          <For each={navLinks}>
+            {(l) => (
+              <li>
+                <a
+                  href={l.href}
+                  aria-current={isActive(l.href) ? "location" : undefined}
+                  class={cn(
+                    "rounded-full px-3 py-1.5 text-sm transition-colors hover:bg-white/[0.04] hover:text-foreground",
+                    isActive(l.href) ? "bg-white/[0.06] text-foreground" : "text-muted",
+                  )}
+                >
+                  {l.label}
+                </a>
+              </li>
+            )}
+          </For>
         </ul>
 
-        <div className="flex items-center gap-2">
-          <Link
+        <div class="flex items-center gap-2">
+          <a
             href={site.social.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden rounded-full border border-white/10 px-3 py-1.5 text-sm text-muted transition-colors hover:border-white/20 hover:text-foreground sm:inline-flex"
+            class="hidden items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-sm text-muted transition-colors hover:border-white/20 hover:text-foreground sm:inline-flex"
           >
+            <GitHubIcon />
             GitHub
-          </Link>
-          <motion.button
+          </a>
+          <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-foreground lg:hidden"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-foreground transition-transform active:scale-95 lg:hidden"
             onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
-            whileTap={{ scale: 0.96 }}
+            aria-expanded={open()}
+            aria-controls="mobile-menu"
+            aria-label={open() ? "Close menu" : "Open menu"}
           >
-            <span className="flex w-5 flex-col gap-1.5">
+            <span class="flex w-5 flex-col gap-1.5">
               <span
-                className={cn(
+                class={cn(
                   "h-0.5 w-full origin-center rounded-full bg-foreground transition-transform",
-                  open && "translate-y-2 rotate-45",
+                  open() && "translate-y-2 rotate-45",
                 )}
               />
+              <span class={cn("h-0.5 w-full rounded-full bg-foreground transition-opacity", open() && "opacity-0")} />
               <span
-                className={cn(
-                  "h-0.5 w-full rounded-full bg-foreground transition-opacity",
-                  open && "opacity-0",
-                )}
-              />
-              <span
-                className={cn(
+                class={cn(
                   "h-0.5 w-full origin-center rounded-full bg-foreground transition-transform",
-                  open && "-translate-y-2 -rotate-45",
+                  open() && "-translate-y-2 -rotate-45",
                 )}
               />
             </span>
-          </motion.button>
+          </button>
         </div>
       </nav>
 
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-white/[0.06] bg-background/98 lg:hidden"
-          >
-            <ul className="flex flex-col gap-0.5 px-5 py-4">
-              {navLinks.map((l) => (
-                <li key={l.href}>
-                  <Link
+      <Show when={open()}>
+        <div id="mobile-menu" class="menu-in overflow-hidden border-t border-white/[0.06] bg-background/98 lg:hidden">
+          <ul class="flex flex-col gap-0.5 px-5 py-4">
+            <For each={navLinks}>
+              {(l) => (
+                <li>
+                  <a
                     href={l.href}
-                    className="block rounded-lg px-2 py-2.5 text-sm text-muted transition-colors hover:bg-white/[0.04] hover:text-foreground"
+                    aria-current={isActive(l.href) ? "location" : undefined}
+                    class={cn(
+                      "block rounded-lg px-2 py-2.5 text-sm transition-colors hover:bg-white/[0.04] hover:text-foreground",
+                      isActive(l.href) ? "bg-white/[0.06] text-foreground" : "text-muted",
+                    )}
                     onClick={() => setOpen(false)}
                   >
                     {l.label}
-                  </Link>
+                  </a>
                 </li>
-              ))}
-            </ul>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+              )}
+            </For>
+          </ul>
+        </div>
+      </Show>
     </header>
   );
 }

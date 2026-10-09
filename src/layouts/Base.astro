@@ -1,0 +1,44 @@
+---
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
+import "@fontsource-variable/syne";
+import syneLatin from "@fontsource-variable/syne/files/syne-latin-wght-normal.woff2?url";
+import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
+import "@/styles/global.css";
+
+const title = "Giuseppe Vitolo | Software Engineer · Backend & Data";
+const description =
+  "Giuseppe Vitolo, Computer Engineering MSc student in Aarhus. Rust, PostgreSQL, Kubernetes and React projects, including Pokoin, CardRail and B2B product-data tools.";
+const ogDescription =
+  "Backend systems, data pipelines and web products. Explore Pokoin, CardRail and my B2B work at prduct.";
+const canonical = new URL("/", Astro.site);
+const ogImage = new URL("/giuseppe-vitolo.jpg", Astro.site);
+---
+
+<!doctype html>
+<html lang="en" class="h-full scroll-smooth antialiased">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={syneLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="400" />
+    <meta property="og:image:height" content="400" />
+    <meta property="og:image:alt" content="Giuseppe Vitolo" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#050506" />
+    <slot name="head" />
+  </head>
+  <body class="min-h-full bg-background text-foreground">
+    <slot />
+  </body>
+</html>
