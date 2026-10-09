@@ -61,16 +61,16 @@ html:not(.js) .static-stage {
   pointer-events: none;
 }
 
+/* Hidden overlays stay in the accessibility tree and the tab order (no
+   visibility: hidden): focusing a link reveals its overlay via :focus-within. */
 .overlay {
   max-width: 34rem;
-  pointer-events: auto;
+  pointer-events: none;
   opacity: 0;
   transform: translate3d(0, 14px, 0);
   transition:
     opacity 0.55s var(--ease),
-    transform 0.7s var(--ease),
-    visibility 0s linear 0.55s;
-  visibility: hidden;
+    transform 0.7s var(--ease);
 }
 .overlay.is-visible,
 .overlay:focus-within,
@@ -78,10 +78,7 @@ html:not(.js) .overlay,
 html.static .overlay {
   opacity: 1;
   transform: none;
-  visibility: visible;
-  transition:
-    opacity 0.55s var(--ease),
-    transform 0.7s var(--ease);
+  pointer-events: auto;
 }
 
 .overlay .kicker {

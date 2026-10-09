@@ -431,16 +431,16 @@ In the bench, CPU-updating 8,000 instance matrices per frame uploaded **512,000 
 
 ```mermaid
 flowchart LR
-  subgraph DOM["DOM (SolidJS) — owns layout & semantics"]
-    S1[Section: Poko intro] --> S2[Section: Disintegration] --> S3[Section: Portal] --> S4[Sections: Project sculptures] --> S5[Section: Reconstruction]
+  subgraph DOM["DOM (SolidJS) owns layout and semantics"]
+    S1["Section: Poko intro"] --> S2["Section: Disintegration"] --> S3["Section: Portal"] --> S4["Sections: Project sculptures"] --> S5["Section: Reconstruction"]
   end
-  RO[ResizeObserver: measure section offsets once] --> MAP
-  SCROLL[window.scrollY - native, passive] --> MAP[progress p = clamp((y - start)/(end - start))]
-  MAP --> SMOOTH[visual progress: damp(p, k, dt)]
-  SMOOTH --> STATE[pure state = f(progress): bone pose, voxel targets, camera, portal mask]
-  TIME[time layer: idle wobble, disabled by reduced-motion] --> STATE
-  STATE --> GPU[single WebGL2 canvas: instanced voxels + rigid skinning + portal RT]
-  GPU --> POST[scene RT (MSAA) → dual-filter bloom → final uber pass (tonemap+grain+vignette)]
+  RO["ResizeObserver: measure section offsets once"] --> MAP
+  SCROLL["window.scrollY (native, passive)"] --> MAP["progress p = clamp((y - start) / (end - start))"]
+  MAP --> SMOOTH["visual progress: damp(p, k, dt)"]
+  SMOOTH --> STATE["pure state = f(progress): bone pose, voxel targets, camera, portal mask"]
+  TIME["time layer: idle wobble (off under reduced motion)"] --> STATE
+  STATE --> GPU["single WebGL2 canvas: instanced voxels + rigid skinning + portal RT"]
+  GPU --> POST["scene RT (MSAA) → dual-filter bloom → final uber pass (tonemap, grain, vignette)"]
 ```
 
 ## 6. Verification checklist for when lusion.co is reachable

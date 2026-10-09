@@ -1,0 +1,95 @@
+{
+  "label": "genesis-high",
+  "url": "http://127.0.0.1:4180/?debug&quality=high",
+  "mobile": false,
+  "network": "none",
+  "date": "2026-10-09T17:19:04.486Z",
+  "environment": "headless Chromium 141 (Playwright 1.56.1), SwiftShader software WebGL, no GPU; loopback server",
+  "cold": {
+    "wallMs": 2352,
+    "fcp": 156,
+    "lcp": 156,
+    "domContentLoaded": 59.799999999813735,
+    "load": 64.1000000005588,
+    "longTasks": 2,
+    "blockingMs": 521,
+    "firstWebGLFrameMs": 758.7999999998137,
+    "requests": 11,
+    "rawBytes": 1004013,
+    "gzipBytes": 399601,
+    "wireBytes": 395647,
+    "gzipBytesByType": {
+      "Document": 11465,
+      "Stylesheet": 3643,
+      "Image": 975,
+      "Font": 74308,
+      "Script": 215434,
+      "Fetch": 93776
+    },
+    "scriptMs": 41,
+    "taskMs": 753,
+    "jsHeapUsedMB": 4.7
+  },
+  "story": {
+    "scrollDurationMs": 333202,
+    "frames": 383,
+    "avgFps": 1.1,
+    "frameP50": 866.7,
+    "frameP95": 1133.4,
+    "frameP99": 1449.9,
+    "frameMax": 3016.5,
+    "jankFrames": 6,
+    "cpuPerFrameP50": 1,
+    "cpuPerFrameP95": 3.4,
+    "wheelToFrameP50": 2963.2,
+    "wheelToFrameP95": 3623.9,
+    "quality": "high",
+    "drawCallsAtEnd": 22,
+    "trianglesAtEnd": 107741,
+    "gpuGeometries": 12,
+    "gpuTextures": 22,
+    "programs": 17,
+    "drawingBuffer": [
+      1440,
+      900
+    ],
+    "timings": {
+      "formationsMs": 31.800000000745058,
+      "engineMs": 41.299999999813735,
+      "firstFrameMs": 529.7999999998137,
+      "characterMs": 36.40000000037253
+    },
+    "histogram": {
+      "<17": 6,
+      "17-33": 0,
+      "33-50": 0,
+      "50-100": 0,
+      ">100": 377
+    }
+  },
+  "warm": {
+    "wallMs": 2112,
+    "fcp": 60,
+    "lcp": 60,
+    "domContentLoaded": 42.60000000055879,
+    "load": 45.60000000055879,
+    "longTasks": 1,
+    "blockingMs": 382,
+    "firstWebGLFrameMs": 549.7999999998137,
+    "requests": 11,
+    "rawBytes": 1004013,
+    "gzipBytes": 399601,
+    "wireBytes": 1813,
+    "gzipBytesByType": {
+      "Document": 11465,
+      "Font": 74308,
+      "Stylesheet": 3643,
+      "Image": 975,
+      "Script": 215434,
+      "Fetch": 93776
+    },
+    "scriptMs": 32,
+    "taskMs": 567,
+    "jsHeapUsedMB": 4.7
+  }
+}

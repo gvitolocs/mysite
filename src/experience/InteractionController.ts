@@ -18,11 +18,12 @@ export class InteractionController {
   readonly pointer = new THREE.Vector2();
   private readonly raw = new THREE.Vector2();
   readonly ray = new THREE.Ray();
-  /** Seconds since the last pointer activity. */
-  idleTime = 0;
+  /** Seconds since the last pointer activity (∞ until the visitor actually uses a pointer). */
+  idleTime = Number.POSITIVE_INFINITY;
   /** 0..1, how much the pointer is "present" (fades out after touch). */
   presence = 0;
   private touching = false;
+  private downAt = { x: 0, y: 0, t: 0 };
   private isTouch = false;
   private readonly raycaster = new THREE.Raycaster();
   private clickHandler: ((ray: THREE.Ray) => void) | null = null;
@@ -56,8 +57,6 @@ export class InteractionController {
     this.touching = true;
     this.downAt = { x: e.clientX, y: e.clientY, t: performance.now() };
   }
-
-  private downAt = { x: 0, y: 0, t: 0 };
 
   private up(e: PointerEvent): void {
     this.touching = false;

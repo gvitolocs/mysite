@@ -1,0 +1,58 @@
+{
+  "label": "baseline-4g",
+  "url": "http://127.0.0.1:4190/",
+  "mobile": false,
+  "network": "4g",
+  "date": "2026-10-09T17:13:56.033Z",
+  "environment": "headless Chromium 141 (Playwright 1.56.1), SwiftShader software WebGL, no GPU; loopback server",
+  "cold": {
+    "wallMs": 2039,
+    "fcp": 636,
+    "lcp": 1820,
+    "domContentLoaded": 178.3999999994412,
+    "load": 462.79999999981374,
+    "longTasks": 0,
+    "blockingMs": 0,
+    "firstWebGLFrameMs": null,
+    "requests": 18,
+    "rawBytes": 915761,
+    "gzipBytes": 383135,
+    "wireBytes": 330349,
+    "gzipBytesByType": {
+      "Document": 66449,
+      "Stylesheet": 8229,
+      "Image": 9161,
+      "Script": 204459,
+      "Font": 86956,
+      "Fetch": 7881
+    },
+    "scriptMs": 82,
+    "taskMs": 251,
+    "jsHeapUsedMB": 4.6
+  },
+  "warm": {
+    "wallMs": 1740,
+    "fcp": 180,
+    "lcp": 1448,
+    "domContentLoaded": 83.6000000005588,
+    "load": 171,
+    "longTasks": 0,
+    "blockingMs": 0,
+    "firstWebGLFrameMs": null,
+    "requests": 18,
+    "rawBytes": 915761,
+    "gzipBytes": 383135,
+    "wireBytes": 4384,
+    "gzipBytesByType": {
+      "Document": 66449,
+      "Stylesheet": 8229,
+      "Font": 86956,
+      "Image": 9161,
+      "Script": 204459,
+      "Fetch": 7881
+    },
+    "scriptMs": 76,
+    "taskMs": 215,
+    "jsHeapUsedMB": 4.7
+  }
+}

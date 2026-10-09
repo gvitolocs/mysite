@@ -115,7 +115,7 @@ export const CHAPTERS: Chapter[] = [
     id: 'finale',
     nav: 'Contact',
     length: 1.6,
-    overlay: [0.2, 1],
+    overlay: [0, 1],
     title: site.name,
     titleHidden: true,
     body: 'Software engineer in Aarhus, open to backend, data and product engineering roles.',
