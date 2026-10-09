@@ -1,6 +1,7 @@
 ---
 import { getImage } from "astro:assets";
 import Base from "@/layouts/Base.astro";
+import Navbar from "@/components/layout/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { Experience } from "@/components/sections/Experience";
@@ -8,19 +9,32 @@ import { Skills } from "@/components/sections/Skills";
 import { GuidingPrinciples } from "@/components/sections/GuidingPrinciples";
 import { Vision } from "@/components/sections/Vision";
 import { Contact } from "@/components/sections/Contact";
+import { Projects } from "@/components/sections/Projects";
 import { Footer } from "@/components/layout/Footer";
 import portraitSrc from "@/assets/giuseppe-vitolo.jpg";
+import pokoinShot from "@/assets/projects/pokoin.webp";
+import cardrailShot from "@/assets/projects/cardrail.webp";
+import prductShot from "@/assets/projects/prduct.webp";
+import type { Shot, Shots } from "@/components/projects/ProjectMedia";
 
 const p = await getImage({ src: portraitSrc, widths: [384, portraitSrc.width], format: "avif" });
 const portrait = { src: p.src, srcset: p.srcSet.attribute, width: 384, height: 384 };
+
+// Project screenshots: real captures of the live sites, resized and converted to AVIF at build time.
+async function shot(src: ImageMetadata): Promise<Shot> {
+  const r = await getImage({ src, widths: [560, 1120], format: "avif" });
+  return { src: r.src, srcset: r.srcSet.attribute, width: src.width, height: src.height };
+}
+const shots: Shots = { pokoin: await shot(pokoinShot), cardrail: await shot(cardrailShot), prduct: await shot(prductShot) };
 ---
 
 <Base>
+  <Navbar client:load />
   <main class="flex flex-1 flex-col">
     <Hero portrait={portrait} />
     <About />
     <Experience />
-    {/* Projects: added in task P4 */}
+    <Projects shots={shots} />
     <Skills />
     <GuidingPrinciples />
     <Vision />

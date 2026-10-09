@@ -58,20 +58,32 @@ function brandColor(hex: string) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.08 ? "currentColor" : `#${hex}`;
 }
 
+/**
+ * Every logo is defined once in /icons.svg (built by src/pages/icons.svg.ts) and referenced with <use>.
+ * Inlining the paths at each of the ~70 uses added ~170 KB of HTML ahead of the hero.
+ */
+export const SPRITE_URL = "/icons.svg";
+
+export function spriteSvg() {
+  const unique = [...new Set([...Object.values(icons), siGithub])];
+  const symbols = unique.map((i) => `<symbol id="si-${i.slug}" viewBox="0 0 24 24"><path d="${i.path}"/></symbol>`);
+  return `<svg xmlns="http://www.w3.org/2000/svg">${symbols.join("")}</svg>`;
+}
+
 export function TechIcon(props: { name: string; class?: string }) {
   const icon = icons[props.name];
   if (!icon) return null;
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" class={cn("h-3.5 w-3.5 shrink-0", props.class)}>
-      <path d={icon.path} fill={brandColor(icon.hex)} />
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill={brandColor(icon.hex)} class={cn("h-3.5 w-3.5 shrink-0", props.class)}>
+      <use href={`${SPRITE_URL}#si-${icon.slug}`} />
     </svg>
   );
 }
 
 export function GitHubIcon(props: { class?: string }) {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" class={cn("h-4 w-4 shrink-0", props.class)}>
-      <path d={siGithub.path} fill="currentColor" />
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" class={cn("h-4 w-4 shrink-0", props.class)}>
+      <use href={`${SPRITE_URL}#si-${siGithub.slug}`} />
     </svg>
   );
 }

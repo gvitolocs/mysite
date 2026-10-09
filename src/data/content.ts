@@ -92,6 +92,12 @@ export type Project = {
   stack: string[]; links: { label: string; href: string }[];
   metrics?: { value: string; label: string }[]; measurementNote?: string;
   accent: "teal" | "violet";
+  /** A real screenshot of the live product, or a labelled diagram built only from the facts above. */
+  media?:
+    | { kind: "screenshot"; image: "pokoin" | "cardrail" | "prduct"; host: string; alt: string }
+    | { kind: "diagram"; diagram: "pipeline" | "cardvault" | "hmi" };
+  /** Before/after pairs drawn as bars; the numbers repeat the measured metrics. */
+  compare?: { label: string; unit: string; before: number; after: number; beforeLabel: string; afterLabel: string }[];
 };
 export const projects: Project[] = [
   {
@@ -105,6 +111,11 @@ export const projects: Project[] = [
     measurementNote: "29 Sep 2026 load test, 8 concurrent requests: direct Pi API baseline compared with the serving path through the cached edge.",
     stack: ["Rust", "Axum", "PostgreSQL", "Kubernetes", "React", "Cloudflare"],
     links: [{ label: "Visit Pokoin", href: "https://pokoin.com" }], accent: "teal",
+    media: { kind: "screenshot", image: "pokoin", host: "pokoin.com", alt: "Pokoin home page: “The market belongs to the collectors.”" },
+    compare: [
+      { label: "Home-feed median latency", unit: "ms", before: 6900, after: 26, beforeLabel: "Direct Pi API", afterLabel: "Cached edge" },
+      { label: "Home-feed throughput", unit: "req/s", before: 1.3, after: 284, beforeLabel: "Direct Pi API", afterLabel: "Cached edge" },
+    ],
   },
   {
     id: "cardrail", name: "CardRail", tagline: "In development",
@@ -115,6 +126,7 @@ export const projects: Project[] = [
       { label: "Open CardRail", href: "https://cardrails.vercel.app" },
       { label: "Source code", href: "https://github.com/gvitolocs/CardRail" },
     ], accent: "violet",
+    media: { kind: "screenshot", image: "cardrail", host: "cardrails.vercel.app", alt: "CardRail scan desk: phone pairing code, batch defaults and the scan table" },
   },
   {
     id: "prduct-dpp", name: "prduct · DPP assessment", tagline: "Sprint prototype",
@@ -125,6 +137,7 @@ export const projects: Project[] = [
       { label: "Try the prototype", href: "https://demosprint-fawn.vercel.app" },
       { label: "Source code", href: "https://github.com/gvitolocs/prduct_sprint" },
     ], accent: "teal",
+    media: { kind: "screenshot", image: "prduct", host: "demosprint-fawn.vercel.app", alt: "prduct DPP readiness assessment landing page, marked as a sprint prototype" },
   },
   {
     id: "price-pipelines", name: "Catalog & price data pipelines", tagline: "Data engineering",
@@ -137,6 +150,7 @@ export const projects: Project[] = [
     measurementNote: "Historical data covers English and Japanese Pokémon, Feb 2024–Sep 2026. The 30 Sep 2026 snapshot contains 510,593 distinct products across categories.",
     stack: ["Python", "PostgreSQL", "SQL", "Partitioning", "Data validation"],
     links: [{ label: "Integrated into Pokoin", href: "https://pokoin.com" }], accent: "violet",
+    media: { kind: "diagram", diagram: "pipeline" },
   },
   {
     id: "cardvault", name: "CardVault", tagline: "Mobile app",
@@ -144,6 +158,7 @@ export const projects: Project[] = [
     description: "A Flutter application for organizing cards and accessing the Pokoin catalog. It brings collection and inventory workflows into a mobile interface, using shared APIs for search and card data.",
     stack: ["Dart", "Flutter", "Firebase", "REST APIs"],
     links: [{ label: "Source code", href: "https://github.com/gvitolocs/cardvault" }], accent: "teal",
+    media: { kind: "diagram", diagram: "cardvault" },
   },
   {
     id: "industrial-hmi", name: "Industrial monitoring & HMI", tagline: "Internship project",
@@ -151,6 +166,7 @@ export const projects: Project[] = [
     description: "A JavaFX prototype for three simulated industrial machines. Modbus TCP acquisition feeds timestamped measurements into MySQL, with dashboards for machine state, alarms, velocity and temperature. Developed during my Innovation Engineering internship.",
     stack: ["Java", "JavaFX", "MySQL", "Modbus TCP"],
     links: [{ label: "Read my CV", href: "/cv.pdf" }], accent: "violet",
+    media: { kind: "diagram", diagram: "hmi" },
   },
 ];
 
