@@ -430,8 +430,11 @@ the browser.
 
 * **Constant voxel count, variable fill rate.** 4 096 cubes is about 49 k
   triangles, trivial for any WebGL2 GPU. Tiers (`QualityManager.ts`) trade what
-  actually costs: resolution (DPR cap × resolution scale), MSAA (4/2/0), shadows
-  (2048/1024/off) and bloom (on/on/off).
+  actually costs: resolution (DPR cap × resolution scale), MSAA (4/2/0, and
+  only at effective pixel ratios ≤ 1.25, since denser screens antialias by
+  themselves and 4× MSAA on a 2880×1800 half-float target costs about 250 MB),
+  shadows (2048/1024/off) and bloom (on/on/off). The canvas has no depth buffer:
+  only the composite pass draws to it.
 * **Adaptive quality with hysteresis.** Drop a tier when the p90 frame time
   over 90 frames exceeds 1.35 × budget. Rise only after 8 consecutive
   comfortable windows (p90 < 0.6 × budget). A manual choice locks it.
