@@ -172,7 +172,7 @@ export class Experience {
     const exp = new Experience(opts);
     opts.scroll.snap();
     exp.resize();
-    await exp.warmUp();
+    if (!new URLSearchParams(location.search).has('nowarmup')) await exp.warmUp();
     exp.tick(0, performance.now());
     exp.timings.firstFrameMs = performance.now() - start;
     if (opts.debug) exp.installDebugApi();
