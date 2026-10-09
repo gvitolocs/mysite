@@ -11,6 +11,9 @@
   --accent-secondary: #818cf8;
   --accent-glow: rgba(45, 212, 191, 0.12);
   --violet-glow: rgba(129, 140, 248, 0.1);
+  --font-geist-sans: "Geist Variable";
+  --font-geist-mono: "Geist Mono Variable";
+  --font-syne: "Syne Variable";
 }
 
 @theme inline {
