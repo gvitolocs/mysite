@@ -11,9 +11,14 @@ export function Footer() {
   return (
     <footer class="border-t border-white/[0.06] bg-background">
       <div class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-12 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-        <p class="text-sm text-muted">
-          © {year} {site.name}. {footer.note}
-        </p>
+        <div>
+          <p class="text-sm text-muted">
+            © {year} {site.name}. {footer.note}
+          </p>
+          <p class="mt-1 font-mono text-[11px] text-muted/70">
+            Built with Astro + SolidJS · hero particle field in Rust → WebAssembly
+          </p>
+        </div>
         <div class="flex flex-wrap gap-6 text-sm">
           {linkedin ? (
             <a href={linkedin} target="_blank" rel="noopener noreferrer" class={link}>

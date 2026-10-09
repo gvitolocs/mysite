@@ -2,6 +2,7 @@
 import { getImage } from "astro:assets";
 import Base from "@/layouts/Base.astro";
 import Navbar from "@/components/layout/Navbar";
+import HeroField from "@/components/layout/HeroField";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { Experience } from "@/components/sections/Experience";
@@ -31,7 +32,9 @@ const shots: Shots = { pokoin: await shot(pokoinShot), cardrail: await shot(card
 <Base>
   <Navbar client:load />
   <main class="flex flex-1 flex-col">
-    <Hero portrait={portrait} />
+    <Hero portrait={portrait}>
+      <HeroField client:idle />
+    </Hero>
     <About />
     <Experience />
     <Projects shots={shots} />
