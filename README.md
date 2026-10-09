@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Giuseppe Vitolo's portfolio
 
-## Getting Started
+Live site: https://gvitolo.vercel.app/
 
-First, run the development server:
+Next.js portfolio with a locally hosted portrait, current projects and the English CV from [gvitolocs/myresume](https://github.com/gvitolocs/myresume). Shared copy and project links are in `src/data/content.ts`.
 
-```bash
+## Local development
+
+```sh
+npm ci
+npm run cv:sync
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Before publishing:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm run lint
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`npm run cv:sync` downloads `Giuseppe_Vitolo_EN.pdf` from the resume repository and validates the PDF header before replacing `public/cv.pdf`. The portrait is `public/giuseppe-vitolo.jpg`, taken from an existing CV.
 
-## Learn More
+The existing Vercel project is `mysite` (`prj_RvC32Suxq8gRmV5mvKbrvjQOppus`) in `giuseppevitolo17s-projects`. Preserve the production domain `gvitolo.vercel.app`.
 
-To learn more about Next.js, take a look at the following resources:
+## Project figures
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Pokoin home-feed measurements compare the direct Pi API baseline with the optimized serving path through the cached edge: September 29, 2026, eight concurrent requests. They describe end-to-end results rather than a Rust-only speedup. The documented Rust production migration covers autocomplete.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Historical price imports comprise 52,940,443 English/Japanese Pokemon observations, 951 archives and 32 monthly PostgreSQL partitions. The September 30 snapshot contains 624,798 product/variant rows and 510,593 distinct products. Dataset rows are not sales or user counts.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+CardRail is marked as in development; the prduct DPP assessment is a sprint prototype. The prduct internship uses the year 2026 because precise months and the formal role title have not yet been confirmed.

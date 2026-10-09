@@ -19,14 +19,18 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "Giuseppe Vitolo — Computer Engineering · Cybersecurity",
+  metadataBase: new URL("https://gvitolo.vercel.app"),
+  title: "Giuseppe Vitolo | Software Engineer · Backend & Data",
   description:
-    "Giuseppe Vitolo — Computer Engineering graduate and Master’s student at Aarhus University (cybersecurity). International direction, systems & security focus, Denmark-based.",
+    "Giuseppe Vitolo, Computer Engineering MSc student in Aarhus. Rust, PostgreSQL, Kubernetes and React projects, including Pokoin, CardRail and B2B product-data tools.",
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Giuseppe Vitolo — Computer Engineering · Cybersecurity",
+    title: "Giuseppe Vitolo | Software Engineer · Backend & Data",
     description:
-      "Portfolio — cybersecurity, distributed systems, formal methods, and disciplined engineering.",
+      "Backend systems, data pipelines and web products. Explore Pokoin, CardRail and my B2B work at prduct.",
     type: "website",
+    url: "/",
+    images: [{ url: "/giuseppe-vitolo.jpg", width: 499, height: 499, alt: "Giuseppe Vitolo" }],
   },
 };
 

@@ -1,259 +1,194 @@
-/**
- * Giuseppe Vitolo — portfolio content (single source of truth).
- * Edit this file to update copy, links, and section data.
- */
+/** Giuseppe Vitolo's portfolio: shared copy, links and project evidence. */
 
-export type SiteSocial = {
-  github: string;
-  linkedin?: string;
-};
-
-export const site: {
-  name: string;
-  firstName: string;
-  role: string;
-  tagline: string;
-  email: string;
-  location: string;
-  social: SiteSocial;
-} = {
+export type SiteSocial = { github: string; linkedin?: string };
+export const site = {
   name: "Giuseppe Vitolo",
-  /** First name for compact nav / hero panel */
   firstName: "Giuseppe",
-  role: "Computer Engineering graduate · MSc @ Aarhus University · Cybersecurity",
-  tagline:
-    "Building an international path in technology — grounded in security, systems, and disciplined engineering.",
+  role: "Software engineering · MSc Computer Engineering, Aarhus University",
+  tagline: "Backend services, data pipelines and useful web products.",
   email: "gvitolocs@gmail.com",
-  location: "Aarhus, Denmark · Italian · Building long-term in Scandinavia",
-  /** Add `linkedin: "https://…"` inside `social` to surface LinkedIn in the footer and contact block */
+  location: "Aarhus, Denmark",
+  avatarUrl: "/giuseppe-vitolo.jpg",
   social: {
-    github: "https://github.com/gvitolo",
-  },
+    github: "https://github.com/gvitolocs",
+    linkedin: "https://www.linkedin.com/in/gvitolocs/",
+  } satisfies SiteSocial,
 };
 
-/** Set `available: true` and add `public/cv.pdf` to enable the download control */
-export const cv = {
-  available: false,
-  href: "/cv.pdf",
-} as const;
-
+export const cv = { available: true, href: "/cv.pdf" } as const;
 export const hero = {
-  headline: "Security-minded engineering for systems that have to hold up in the real world.",
-  subhead:
-    "I’m Giuseppe Vitolo — Computer Engineering graduate and Master’s student at Aarhus University, specializing in cybersecurity. I build at the intersection of theory and practice: cryptography, distributed systems, verification, and dependable backends — from Italy to Denmark, with an international career and life I’m constructing with the same long horizon I bring to difficult engineering work.",
-  primaryCta: { label: "Selected work", href: "#projects" },
-  secondaryCta: { label: "Connect", href: "#contact" },
-  /** Right-hand panel — short lines; swap for photo when ready */
+  headline: "Backend engineering, data pipelines and web products.",
+  subhead: "I’m Giuseppe Vitolo, a Computer Engineering MSc student at Aarhus University. I build with Rust, Kubernetes and PostgreSQL, from a trading-card marketplace to pipelines processing millions of price observations and B2B product-data tools.",
+  primaryCta: { label: "Explore my projects", href: "#projects" },
+  secondaryCta: { label: "Download CV", href: "/cv.pdf" },
   presence: {
-    label: "Focus",
-    line1:
-      "Cybersecurity · Distributed systems · Formal methods · Reliable backends",
-    line2: "Denmark · International direction · Serious momentum",
+    label: "Software engineer · MSc student",
+    line1: "Backend systems · Data engineering · Cybersecurity",
+    line2: "Building products in Aarhus, Denmark",
   },
 };
 
 export const about = {
   eyebrow: "About",
-  title: "Discipline first. Ambition with substance.",
+  title: "Connecting software, data and the people who use it.",
   paragraphs: [
-    "I’m Giuseppe Vitolo — a Computer Engineering graduate and Master’s student at Aarhus University, specializing in cybersecurity. My direction is international: I’m Italian, I’m building my future in Denmark, and I care about mobility, adaptability, and long-term seriousness — professionally and personally, alongside my partner.",
-    "I’m motivated by growth and competence, not noise. I improve through structure: clear goals, sustained attention, and honest iteration. That same mindset shows up in competitive environments too — including reaching Diamond in League of Legends — not as a gimmick, but as proof that I can stay focused under pressure and keep performing when progress is slow and the work is hard.",
-    "Technically, I gravitate toward cybersecurity, software engineering, distributed systems, formal reasoning, and backends that stay correct when things go wrong. I want the site you’re reading to feel like a stake in the ground: a serious engineer at the start of a strong, international career.",
+    "I’m an Italian Computer Engineering graduate based in Aarhus, where I’m studying for an MSc with a focus on cybersecurity. My work combines backend development, distributed systems and practical product design.",
+    "Through Pokoin, I build marketplace APIs, web interfaces and data pipelines. Recent work includes a Rust autocomplete service, Kubernetes overflow routing and PostgreSQL imports covering 52.9 million historical price observations.",
+    "My B2B internship at prduct focuses on how product information moves from suppliers to companies and retailers. I built an interactive Digital Product Passport assessment prototype that gives purchasing and sales teams questions they can answer and a clear picture of their data gaps.",
   ],
   highlights: [
-    { label: "Education", value: "MSc Computer Engineering (Cybersecurity), AU" },
-    { label: "Base", value: "Aarhus · International outlook" },
-    { label: "Core themes", value: "Security · Systems · Rigor · Depth" },
+    { label: "Education", value: "MSc Computer Engineering, Aarhus University" },
+    { label: "Based in", value: "Aarhus, Denmark" },
+    { label: "Working with", value: "Rust · PostgreSQL · Kubernetes · React" },
   ],
 };
 
 export type ExperienceItem = {
-  id: string;
-  title: string;
-  org: string;
-  period: string;
-  location: string;
-  summary: string;
-  tags: string[];
+  id: string; title: string; org: string; period: string; location: string;
+  summary: string; tags: string[];
   kind: "education" | "work" | "internship" | "milestone";
 };
-
 export const experience: ExperienceItem[] = [
   {
-    id: "msc-au",
-    kind: "education",
-    title: "MSc Computer Engineering — Cybersecurity",
-    org: "Aarhus University",
-    period: "In progress",
-    location: "Denmark",
-    summary:
-      "Master’s studies centered on computer engineering with a specialization in cybersecurity — combining systems thinking with formal and practical security perspectives. Coursework and projects align with distributed systems, cryptography, verification, and reliable software.",
-    tags: ["Cybersecurity", "Graduate studies", "Systems"],
+    id: "pokoin", kind: "work", title: "Backend & data engineering",
+    org: "Pokoin · Independent project", period: "2026", location: "Aarhus, Denmark",
+    summary: "Built marketplace APIs and React interfaces, shipped autocomplete in Rust, and configured Kubernetes API overflow with PostgreSQL writer/replica separation. Optimized the home feed with edge caching and request coalescing, and developed transactional imports for large catalog and price datasets.",
+    tags: ["Rust", "PostgreSQL", "Kubernetes", "React", "Data pipelines"],
   },
   {
-    id: "bsc",
-    kind: "education",
-    title: "BSc Computer Engineering",
-    org: "Bachelor’s degree (Italy)",
-    period: "Completed",
-    location: "Italy",
-    summary:
-      "Foundational engineering training across software, systems, and mathematics — the base I build on for graduate work and industry-facing projects.",
-    tags: ["Computer engineering", "Foundations"],
+    id: "prduct", kind: "internship", title: "B2B software development",
+    org: "prduct", period: "2026", location: "Denmark",
+    summary: "Mapped product-data handoffs, documentation ownership and data quality across suppliers, companies and retailers. Built and iterated a Digital Product Passport assessment website with purchasing and sales paths, product-data mapping and stakeholder feedback. The delivered website is a sprint prototype.",
+    tags: ["B2B", "Product data", "Digital Product Passports", "Web development"],
   },
   {
-    id: "intern-industrial",
-    kind: "internship",
-    title: "Industrial internship — data acquisition & HMI",
-    org: "Engineering placement",
-    period: "Internship",
-    location: "Industry",
-    summary:
-      "Delivered a substantial internship project around industrial sensors and Modbus, persisting machine data in MySQL and building the operator-facing HMI in JavaFX with Medusa gauges. The work sat inside a larger roadmap that included a Flutter web front end and Python REST APIs for downstream use. We used Agile methods with throwaway prototyping where exploration had to move fast.",
-    tags: ["Modbus", "MySQL", "JavaFX", "Agile"],
+    id: "msc-au", kind: "education", title: "MSc Computer Engineering",
+    org: "Aarhus University", period: "2026–2028 · expected", location: "Aarhus, Denmark",
+    summary: "Graduate study with a cybersecurity focus. Selected courses include Distributed Systems and Security, Modelling and Verification, and Software Correctness.",
+    tags: ["Cybersecurity", "Distributed systems", "Formal verification"],
+  },
+  {
+    id: "tmelnik", kind: "work", title: "Communications assistant · Digital education",
+    org: "Tmelnik", period: "Jul 2025–Feb 2026", location: "Prague, Czech Republic",
+    summary: "Coordinated digital communication, event activities and reporting with international youth-education partners.",
+    tags: ["Communication", "International collaboration", "Project coordination"],
+  },
+  {
+    id: "intern-industrial", kind: "internship", title: "Java software developer",
+    org: "Innovation Engineering", period: "Jan–Mar 2025", location: "Salerno, Italy",
+    summary: "Built a JavaFX HMI prototype for three simulated industrial machines. Integrated Modbus TCP data acquisition with timestamped measurements in MySQL and operator dashboards.",
+    tags: ["Java", "JavaFX", "MySQL", "Modbus TCP"],
+  },
+  {
+    id: "bsc", kind: "education", title: "BSc Computer Engineering",
+    org: "University of Salerno", period: "2025", location: "Salerno, Italy",
+    summary: "Engineering foundation in programming, algorithms, operating systems, computer networks, databases and software engineering.",
+    tags: ["Computer engineering", "Algorithms", "Systems"],
   },
 ];
 
 export type Project = {
-  id: string;
-  name: string;
-  tagline: string;
-  outcome: string;
-  description: string;
-  stack: string[];
-  links: { label: string; href: string }[];
+  id: string; name: string; tagline: string; outcome: string; description: string;
+  stack: string[]; links: { label: string; href: string }[];
+  metrics?: { value: string; label: string }[]; measurementNote?: string;
   accent: "teal" | "violet";
 };
-
 export const projects: Project[] = [
   {
-    id: "industrial-hmi",
-    name: "Industrial monitoring & HMI",
-    tagline: "Field data, persistence, and operator clarity",
-    outcome:
-      "End-to-end contribution from acquisition to storage to a usable HMI — aligned with a broader product architecture.",
-    description:
-      "Internship-grade engineering: reading industrial sensors over Modbus, landing structured data in MySQL, and shipping a JavaFX HMI with Medusa gauges so operators could trust what they saw. The same data fed a wider system vision involving a Flutter client and Python-backed REST APIs. No public repository for this work — the value is in the engineering narrative and stack depth.",
-    stack: ["Java", "JavaFX", "Medusa", "MySQL", "Modbus", "Python", "Flutter", "REST"],
-    links: [],
-    accent: "teal",
+    id: "pokoin", name: "Pokoin", tagline: "Marketplace",
+    outcome: "Trading-card discovery, pricing and seller workflows.",
+    description: "A marketplace with React web interfaces, shared APIs and provider-data integrations. I shipped autocomplete in Rust using Axum, Tokio and SQLx, configured Kubernetes overflow and PostgreSQL read replicas, and optimized the home feed through edge caching and request coalescing.",
+    metrics: [
+      { value: "6.9 s → 26 ms", label: "Home-feed median latency" },
+      { value: "1.3 → 284 req/s", label: "Home-feed throughput" },
+    ],
+    measurementNote: "29 Sep 2026 load test, 8 concurrent requests: direct Pi API baseline compared with the serving path through the cached edge.",
+    stack: ["Rust", "Axum", "PostgreSQL", "Kubernetes", "React", "Cloudflare"],
+    links: [{ label: "Visit Pokoin", href: "https://pokoin.com" }], accent: "teal",
   },
   {
-    id: "cardwallet",
-    name: "CardWallet",
-    tagline: "Commerce, crypto rails, and ambitious experimentation",
-    outcome:
-      "An entrepreneurial build exploring cryptocurrency payments and what it takes to own more of the stack.",
-    description:
-      "CardWallet is an online card-shop project I drive outside the internship — experimental and product-minded. I’ve explored cryptocurrency payments and studied how a custom chain built with the Cosmos SDK could fit a serious payments story. It’s ambitious by design: fewer guarantees, more learning surface, and a clear bias toward understanding real protocol and backend constraints.",
-    stack: ["Cosmos SDK", "Crypto payments", "Backend exploration", "Commerce"],
-    links: [{ label: "GitHub", href: "https://github.com/gvitolo" }],
-    accent: "violet",
+    id: "cardrail", name: "CardRail", tagline: "In development",
+    outcome: "A scanning desk and stock book for collectible-card inventory.",
+    description: "Connects phone capture, saved scan photos, card recognition and inventory positions. Work includes a Rust/PostgreSQL backend, React web app, Swift and Kotlin clients, and CardTrader and eBay integrations for listing and stock workflows.",
+    stack: ["Rust", "PostgreSQL", "React", "Swift", "Kotlin", "REST APIs"],
+    links: [
+      { label: "Open CardRail", href: "https://cardrails.vercel.app" },
+      { label: "Source code", href: "https://github.com/gvitolocs/CardRail" },
+    ], accent: "violet",
   },
   {
-    id: "academic-depth",
-    name: "Graduate engineering & formal depth",
-    tagline: "Algorithms, correctness, and security foundations",
-    outcome:
-      "A Master’s trajectory that reinforces how I want to work — precise, evidence-based, and systems-aware.",
-    description:
-      "Across coursework and projects I’ve worked with Go, Java, Scala, and Python; built and consumed REST APIs; gone deep on distributed algorithms, cryptography, formal verification, and modelling for correctness. This isn’t a single demo — it’s the intellectual backbone for how I approach cybersecurity and reliable systems.",
-    stack: ["Go", "Scala", "Java", "Python", "REST", "Distributed algorithms", "Formal methods"],
-    links: [],
-    accent: "teal",
+    id: "prduct-dpp", name: "prduct · DPP assessment", tagline: "Sprint prototype",
+    outcome: "Making supplier and product-data gaps visible to B2B teams.",
+    description: "An interactive assessment website from my prduct internship. Purchasing and sales teams follow different questions through a product’s lifecycle, then receive a product-data landscape and practical next steps. Developed through stakeholder feedback for Digital Product Passport readiness.",
+    stack: ["JavaScript", "HTML/CSS", "Python", "B2B", "Product data"],
+    links: [
+      { label: "Try the prototype", href: "https://demosprint-fawn.vercel.app" },
+      { label: "Source code", href: "https://github.com/gvitolocs/prduct_sprint" },
+    ], accent: "teal",
+  },
+  {
+    id: "price-pipelines", name: "Catalog & price data pipelines", tagline: "Data engineering",
+    outcome: "Provider datasets transformed into retail-facing catalog and pricing APIs.",
+    description: "Imported 951 historical archives into 32 monthly PostgreSQL partitions. Daily snapshot processing preserves source hashes, validates row counts and links explicit provider identifiers to Pokoin’s catalog. Transactional imports and resumable stages keep completed datasets readable during refreshes.",
+    metrics: [
+      { value: "52.9M", label: "Historical price observations" },
+      { value: "624,798", label: "Product/variant rows in a snapshot" },
+    ],
+    measurementNote: "Historical data covers English and Japanese Pokémon, Feb 2024–Sep 2026. The 30 Sep 2026 snapshot contains 510,593 distinct products across categories.",
+    stack: ["Python", "PostgreSQL", "SQL", "Partitioning", "Data validation"],
+    links: [{ label: "Integrated into Pokoin", href: "https://pokoin.com" }], accent: "violet",
+  },
+  {
+    id: "cardvault", name: "CardVault", tagline: "Mobile app",
+    outcome: "Collectible-card organization, search and inventory on mobile.",
+    description: "A Flutter application for organizing cards and accessing the Pokoin catalog. It brings collection and inventory workflows into a mobile interface, using shared APIs for search and card data.",
+    stack: ["Dart", "Flutter", "Firebase", "REST APIs"],
+    links: [{ label: "Source code", href: "https://github.com/gvitolocs/cardvault" }], accent: "teal",
+  },
+  {
+    id: "industrial-hmi", name: "Industrial monitoring & HMI", tagline: "Internship project",
+    outcome: "Machine measurements connected to operator dashboards.",
+    description: "A JavaFX prototype for three simulated industrial machines. Modbus TCP acquisition feeds timestamped measurements into MySQL, with dashboards for machine state, alarms, velocity and temperature. Developed during my Innovation Engineering internship.",
+    stack: ["Java", "JavaFX", "MySQL", "Modbus TCP"],
+    links: [{ label: "Read my CV", href: "/cv.pdf" }], accent: "violet",
   },
 ];
 
 export const skills = {
-  eyebrow: "Profile & skills",
-  title: "Where I invest my depth",
-  summary:
-    "Grouped honestly — strengths I’m actively building on, not a buzzword wall.",
-  educationSummary: [
-    "Bachelor’s degree in Computer Engineering",
-    "Master’s student in Computer Engineering at Aarhus University",
-    "Specialization in cybersecurity",
-  ],
+  eyebrow: "Skills", title: "The tools behind my projects",
+  summary: "Practical development experience, supported by graduate study in systems and security.",
+  educationSummary: ["BSc Computer Engineering, University of Salerno", "MSc Computer Engineering, Aarhus University", "Cybersecurity focus"],
   categories: [
-    {
-      name: "Programming",
-      items: ["Go", "Java", "Python", "Scala"],
-    },
-    {
-      name: "Systems & backend",
-      items: ["REST APIs", "MySQL", "Distributed systems", "Service-oriented design"],
-    },
-    {
-      name: "Cybersecurity & theory",
-      items: ["Cryptography", "Formal verification & modelling", "Reasoning about correctness"],
-    },
-    {
-      name: "Tools & delivery",
-      items: ["JavaFX", "Git", "Linux", "Agile collaboration"],
-    },
+    { name: "Programming", items: ["Rust", "Python", "Java", "JavaScript", "Dart", "SQL"] },
+    { name: "Backend & data", items: ["Axum / Tokio / SQLx", "PostgreSQL", "MySQL", "REST APIs", "Data pipelines"] },
+    { name: "Infrastructure & web", items: ["Kubernetes (k3s)", "Docker", "Linux", "Cloudflare", "React", "Git"] },
+    { name: "Systems & security", items: ["Distributed systems", "Cryptography", "Formal verification", "Software correctness"] },
   ],
 };
 
-export type GuidingPrinciple = {
-  id: string;
-  title: string;
-  body: string;
-};
-
-/** Values and mental models — no invented biographies */
+export type GuidingPrinciple = { id: string; title: string; body: string };
 export const guidingPrinciples: GuidingPrinciple[] = [
-  {
-    id: "depth",
-    title: "Technical depth over noise",
-    body: "I care about understanding systems well enough to defend them — assumptions, threat models, and failure modes included. Flash without rigor isn’t interesting.",
-  },
-  {
-    id: "international",
-    title: "International ambition, local discipline",
-    body: "I’m building a life and career across borders — Denmark, Italy, and whatever comes next. Mobility only works with consistency: show up, ship, learn, repeat.",
-  },
-  {
-    id: "longterm",
-    title: "Long-horizon thinking",
-    body: "The outcomes I want are compounding: relationships, craft, reputation. I optimize for what holds up in five or ten years, not for short-term vanity metrics.",
-  },
-  {
-    id: "focus",
-    title: "Sustained focus under pressure",
-    body: "I train concentration the way athletes train endurance — including reaching Diamond in competitive League of Legends. It’s the same muscle: repetition, emotional control, and performance when stakes are high.",
-  },
+  { id: "evidence", title: "Measure the result", body: "I use load tests, row-count reconciliation and repeatable imports to check whether a change improves the system." },
+  { id: "correctness", title: "Protect data correctness", body: "I keep source identity, transaction boundaries and failure recovery explicit, especially when data crosses services." },
+  { id: "users", title: "Start with the workflow", body: "A supplier, an operator and a sales team need different views of the same data. The interface should reflect the work they do." },
+  { id: "ownership", title: "Build for maintenance", body: "I document decisions, preserve reproducible inputs and make failures visible so the next change is easier to understand." },
 ];
 
 export const vision = {
-  eyebrow: "Direction",
-  title: "An international career in cybersecurity and engineering.",
+  eyebrow: "Direction", title: "Growing as a software engineer in Denmark.",
   paragraphs: [
-    "I want to build a career that matches how I think: internationally oriented, technically serious, and grounded in security and systems. I’m motivated by mastery — the kind that comes from years of deliberate work, not from chasing trends.",
-    "In practice, that means deepening my expertise in cybersecurity and reliable engineering, contributing to teams that value clarity and long-term ownership, and standing out through consistency, depth, and the ability to stay focused on hard goals when progress is non-linear.",
+    "I want to work on backend systems and data products where reliability matters to the people using them. My current projects give me practical experience from source data and database design to APIs and user interfaces.",
+    "Alongside my MSc, I’m developing my knowledge of distributed systems, security and software correctness. I’m interested in teams where I can contribute to real products and learn from experienced engineers.",
   ],
   pillars: [
-    {
-      title: "Competence",
-      body: "Grow technical judgment through study, implementation, and honest postmortems.",
-    },
-    {
-      title: "Integrity",
-      body: "Say what I know, label what I assume, and ship work I can explain.",
-    },
-    {
-      title: "Momentum",
-      body: "Small, steady advances beat sporadic intensity — especially across countries and roles.",
-    },
+    { title: "Systems", body: "Understand how services, storage and infrastructure behave together." },
+    { title: "Security", body: "Apply security thinking to interfaces, access boundaries and data handling." },
+    { title: "Products", body: "Connect technical decisions to a workflow and a useful result." },
   ],
 };
-
 export const contact = {
-  eyebrow: "Contact",
-  title: "If the fit is real, let’s talk.",
-  body: "I’m open to meaningful conversations — research-aligned roles, serious engineering teams, and collaborations where cybersecurity and systems depth matter. Write with context; I’ll respond in kind.",
-  replyNote: "I read every message · CET",
+  eyebrow: "Contact", title: "Let’s build something useful.",
+  body: "For software engineering opportunities or collaborations around backend systems, data and B2B products, get in touch. You can find my latest CV and project links below.",
+  replyNote: "Based in Aarhus · Europe/Copenhagen",
 };
-
-export const footer = {
-  note: "Crafted as a personal landing page — focused, international, long-term.",
-};
+export const footer = { note: "Software engineering, systems and data." };

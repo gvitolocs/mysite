@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { AnimatedBackground } from "@/components/layout/AnimatedBackground";
@@ -27,12 +28,12 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-[100svh] overflow-hidden border-b border-white/[0.04] pt-28 pb-20 md:pb-28"
+      className="relative min-h-[90svh] overflow-hidden border-b border-white/[0.04] pt-32 pb-20 md:pb-24"
     >
       <AnimatedBackground />
       <div className="grain pointer-events-none" />
 
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-14 px-5 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-8">
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-12 px-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:px-8">
         {reduce ? (
           <div className="max-w-2xl">
             <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent/90">{site.role}</p>
@@ -42,7 +43,7 @@ export function Hero() {
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted md:text-xl">{hero.subhead}</p>
             <div className="mt-10 flex flex-wrap gap-3">
               <Button href={hero.primaryCta.href}>{hero.primaryCta.label}</Button>
-              <Button href={hero.secondaryCta.href} variant="secondary">
+              <Button href={hero.secondaryCta.href} variant="secondary" external>
                 {hero.secondaryCta.label}
               </Button>
             </div>
@@ -74,7 +75,7 @@ export function Hero() {
             </motion.p>
             <motion.div variants={item} className="mt-10 flex flex-wrap gap-3">
               <Button href={hero.primaryCta.href}>{hero.primaryCta.label}</Button>
-              <Button href={hero.secondaryCta.href} variant="secondary">
+              <Button href={hero.secondaryCta.href} variant="secondary" external>
                 {hero.secondaryCta.label}
               </Button>
             </motion.div>
@@ -86,23 +87,30 @@ export function Hero() {
             initial={reduce ? false : { opacity: 0, scale: 0.96 }}
             animate={reduce ? undefined : { opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-surface-elevated to-background shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_24px_80px_-32px_rgba(45,212,191,0.25)]"
+            className="relative w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-surface-elevated shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_24px_80px_-32px_rgba(45,212,191,0.25)]"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(45,212,191,0.18),transparent_55%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(129,140,248,0.15),transparent_50%)]" />
-            <div className="relative flex h-full flex-col justify-between p-8">
+            <div className="relative aspect-square w-full">
+              <Image
+                src={site.avatarUrl}
+                alt="Portrait of Giuseppe Vitolo"
+                fill
+                preload
+                sizes="(max-width: 480px) calc(100vw - 40px), (max-width: 1023px) 448px, 384px"
+                className="object-cover"
+              />
+            </div>
+            <div className="relative space-y-3 p-6">
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
                   {hero.presence.label}
                 </p>
                 <p className="mt-2 font-display text-2xl font-semibold tracking-tight text-foreground">
-                  {site.firstName}
+                  {site.name}
                   <span className="text-accent">.</span>
                 </p>
               </div>
-              <div className="space-y-3 text-sm text-muted">
+              <div className="space-y-2 text-sm text-muted">
                 <p className="leading-relaxed">{hero.presence.line1}</p>
-                <p className="leading-relaxed text-foreground/85">{hero.presence.line2}</p>
                 <p className="font-mono text-xs text-foreground/70">{site.location}</p>
               </div>
             </div>

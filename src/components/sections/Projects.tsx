@@ -16,12 +16,12 @@ export function Projects() {
       <MotionReveal>
         <SectionHeading
           eyebrow="Portfolio"
-          title="Projects & technical narrative"
-          description="Internship-grade systems, an entrepreneurial build, and graduate depth — each described honestly, with stack and intent in view."
+          title="Recent projects"
+          description="Marketplace services, card inventory, large datasets and B2B product tools."
         />
       </MotionReveal>
 
-      <div className="mt-16 grid gap-6 lg:grid-cols-3">
+      <div className="mt-12 grid gap-6 lg:grid-cols-2">
         {projects.map((p, i) => (
           <MotionReveal key={p.id} delay={i * 0.06}>
             <motion.article
@@ -62,6 +62,22 @@ export function Projects() {
 
               <p className="mt-4 text-sm font-medium text-foreground/90">{p.outcome}</p>
               <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">{p.description}</p>
+
+              {p.metrics ? (
+                <div className="mt-6 border-y border-white/[0.06] py-5">
+                  <dl className="grid gap-4 sm:grid-cols-2">
+                    {p.metrics.map((metric) => (
+                      <div key={metric.label}>
+                        <dt className="text-xs text-muted">{metric.label}</dt>
+                        <dd className="mt-1 text-lg font-semibold text-foreground">{metric.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  {p.measurementNote ? (
+                    <p className="mt-4 text-xs leading-relaxed text-muted">{p.measurementNote}</p>
+                  ) : null}
+                </div>
+              ) : null}
 
               <ul className="mt-6 flex flex-wrap gap-2">
                 {p.stack.map((s) => (

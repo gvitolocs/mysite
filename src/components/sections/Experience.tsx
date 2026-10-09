@@ -23,7 +23,7 @@ export function Experience() {
         <SectionHeading
           eyebrow="Trajectory"
           title="Education & engineering experience"
-          description="Graduate study, foundational training, and industry-facing work — framed as real engineering, not coursework filler."
+          description="Current software projects, B2B and industrial internships, and my studies in Italy and Denmark."
         />
       </MotionReveal>
 
