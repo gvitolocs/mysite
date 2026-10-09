@@ -1,32 +1,53 @@
-# Giuseppe Vitolo's portfolio
+# Poko Genesis — Giuseppe Vitolo's portfolio
 
-Live site: https://gvitolo.vercel.app/
+A cinematic, scroll-driven portfolio. Poko, the pixel-art coin mascot of
+[Pokoin](https://pokoin.com), wakes up as a voxel sculpture, comes apart into
+4 096 GPU-animated cubes, builds a portal, then a Pokoin card, a CardRail
+scanning rack and a systems diagram, and finally reassembles under the name it
+spells in voxels. Every frame is a pure function of the scroll position, so the
+whole journey plays backward exactly.
 
-Next.js portfolio with a locally hosted portrait, current projects and the English CV from [gvitolocs/myresume](https://github.com/gvitolocs/myresume). Shared copy and project links are in `src/data/content.ts`.
+Live (current production): https://gvitolo.vercel.app/
 
-## Local development
+![Poko Genesis](docs/media/gallery/u0250.png)
+
+- Walkthrough video: [`docs/media/poko-genesis-walkthrough.mp4`](docs/media/poko-genesis-walkthrough.mp4)
+- Screenshot gallery: [`docs/media/gallery/`](docs/media/gallery/) (desktop), [`docs/media/mobile/`](docs/media/mobile/)
+- Engineering guide: [`docs/POKO_GENESIS_ENGINEERING.md`](docs/POKO_GENESIS_ENGINEERING.md)
+- Performance report: [`docs/PERFORMANCE_REPORT.md`](docs/PERFORMANCE_REPORT.md)
+- Research on Lusion's public techniques: [`docs/research/`](docs/research/)
+- Asset provenance and licences: [`docs/ASSET_PROVENANCE.md`](docs/ASSET_PROVENANCE.md)
+- Deployment and rollback: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md)
+
+## Stack
+
+SolidJS 1.9 · TypeScript · Vite 8 · three.js r186 (WebGL2, custom GLSL, GPGPU
+compute pass, one instanced draw for all voxels) · Blender 5.1 via `bpy` for the
+rigged character and its 9 actions · gltfpack/meshopt · Vitest · Playwright.
+
+## Develop
 
 ```sh
 npm ci
-npm run cv:sync
-npm run dev
+npm run dev                 # http://127.0.0.1:5173/
+npm test && npm run build && npm run test:e2e
 ```
 
-Before publishing:
+Requires Node 22.18+. Pages are prerendered to `dist/` and work without
+JavaScript or WebGL; the 3D experience loads after the content.
+
+## Character pipeline
 
 ```sh
-npm run lint
-npm run build
+npm run poko:voxels                      # pixel art → voxels (TypeScript)
+pip install bpy==5.1.2                   # or use `blender -b -P`
+python blender/scripts/build_poko.py     # .blend, rig, actions, raw GLB, renders
+npm run poko:pack                        # meshopt-compress + validate the GLB
 ```
 
-`npm run cv:sync` downloads `Giuseppe_Vitolo_EN.pdf` from the resume repository and validates the PDF header before replacing `public/cv.pdf`. The portrait is `public/giuseppe-vitolo.jpg`, taken from an existing CV.
+## Content
 
-The existing Vercel project is `mysite` (`prj_RvC32Suxq8gRmV5mvKbrvjQOppus`) in `giuseppevitolo17s-projects`. Preserve the production domain `gvitolo.vercel.app`.
-
-## Project figures
-
-Pokoin home-feed measurements compare the direct Pi API baseline with the optimized serving path through the cached edge: September 29, 2026, eight concurrent requests. They describe end-to-end results rather than a Rust-only speedup. The documented Rust production migration covers autocomplete.
-
-Historical price imports comprise 52,940,443 English/Japanese Pokemon observations, 951 archives and 32 monthly PostgreSQL partitions. The September 30 snapshot contains 624,798 product/variant rows and 510,593 distinct products. Dataset rows are not sales or user counts.
-
-CardRail is marked as in development; the prduct DPP assessment is a sprint prototype. The prduct internship uses the year 2026 because precise months and the formal role title have not yet been confirmed.
+Copy and project facts are in `src/content/`. CV: `npm run cv:sync` downloads
+the English CV from [gvitolocs/myresume](https://github.com/gvitolocs/myresume)
+into `public/cv.pdf`. Figures keep the caveats documented in that repository
+(see the case-study pages).

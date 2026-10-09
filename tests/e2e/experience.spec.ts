@@ -150,7 +150,6 @@ test.describe('cinematic home page', () => {
       // @ts-expect-error test shim
       HTMLCanvasElement.prototype.getContext = function (type: string, ...rest: unknown[]) {
         if (type === 'webgl2' || type === 'webgl') return null;
-        // @ts-expect-error test shim
         return original.call(this, type, ...rest);
       };
     });

@@ -51,6 +51,8 @@ export interface ExperienceTimings {
   characterMs: number | null;
 }
 
+const yieldToMain = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
+
 const STILL: PokoAnimState = { scrubs: [], idle: 0, blink: false, look: 0 };
 
 export class Experience {
@@ -105,6 +107,10 @@ export class Experience {
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.toneMapping = THREE.NoToneMapping; // done in the composite pass
     this.renderer.info.autoReset = false;
+    // Shader status queries are synchronous round trips to Chrome's GPU process
+    // that wait for compilation. Skipping them in production lets programs
+    // compile in the background; development builds keep full error reporting.
+    this.renderer.debug.checkShaderErrors = import.meta.env.DEV || new URLSearchParams(location.search).has('shadercheck');
 
     const model = buildPokoModel();
     const t1 = performance.now();
@@ -165,13 +171,14 @@ export class Experience {
     const exp = new Experience(opts);
     opts.scroll.snap();
     exp.resize();
+    await exp.warmUp();
     exp.tick(0, performance.now());
     exp.timings.firstFrameMs = performance.now() - start;
     if (opts.debug) exp.installDebugApi();
     exp.scheduler.wake();
     // Stage 2: the Blender character, after first paint.
     const t = performance.now();
-    void loadPokoCharacter().then((gltf) => {
+    void loadPokoCharacter().then(async (gltf) => {
       if (!gltf || exp.disposed) return;
       gltf.scene.traverse((o) => {
         const m = o as THREE.SkinnedMesh;
@@ -181,6 +188,8 @@ export class Experience {
         m.receiveShadow = true;
         m.frustumCulled = false;
       });
+      await exp.renderer.compileAsync(gltf.scene, exp.camera);
+      if (exp.disposed) return;
       if (exp.rig.attachSkinned(gltf.scene)) {
         exp.anim.attachClips(gltf.scene, gltf.animations);
         exp.timings.characterMs = performance.now() - t;
@@ -190,6 +199,37 @@ export class Experience {
       }
     });
     return exp;
+  }
+
+  /**
+   * Compile every shader program before the first frame, in parallel where the
+   * driver supports KHR_parallel_shader_compile. Without this, the first
+   * render compiles ~15 programs synchronously: the single longest task on load.
+   */
+  private async warmUp(): Promise<void> {
+    // A program's compile cost is paid on its first use, when three.js reflects
+    // its uniforms (a synchronous wait for the link in Chrome's GPU process).
+    // Pay it object by object, rendering each alone into the scene's own HDR
+    // target (the same program variant the real frame uses) and yielding in
+    // between: many short tasks instead of one long one. (A scene-wide
+    // compileAsync() would be ideal with KHR_parallel_shader_compile, but
+    // without that extension it compiles everything in one blocking call.)
+    this.engine.update(this.renderer, 0);
+    await yieldToMain();
+    const objects: THREE.Object3D[] = [];
+    this.scene.traverse((o) => {
+      if ((o as THREE.Mesh).isMesh || (o as THREE.Points).isPoints) objects.push(o);
+    });
+    const visible = objects.map((o) => o.visible);
+    for (const target of objects) {
+      for (const o of objects) o.visible = o === target;
+      this.renderer.setRenderTarget(this.post.target);
+      this.renderer.render(this.scene, this.camera);
+      await yieldToMain();
+    }
+    objects.forEach((o, i) => (o.visible = visible[i]));
+    this.renderer.setRenderTarget(null);
+    await this.post.compile(yieldToMain);
   }
 
   // ------------------------------------------------------------------ frame

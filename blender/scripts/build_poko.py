@@ -400,6 +400,8 @@ def stage_scene() -> None:
     scene.cycles.use_denoising = True
     scene.render.resolution_x = 720
     scene.render.resolution_y = 720
+    scene.render.image_settings.file_format = "JPEG"
+    scene.render.image_settings.quality = 88
     scene.view_settings.view_transform = "AgX"
 
 
@@ -417,7 +419,7 @@ def render_previews(rig, views: list[tuple[str, tuple, str | None, int]]) -> Non
                 pb.rotation_quaternion = (1, 0, 0, 0)
                 pb.scale = (1, 1, 1)
         scene.frame_set(frame)
-        scene.render.filepath = str(RENDERS / f"{name}.png")
+        scene.render.filepath = str(RENDERS / f"{name}.jpg")
         floor.hide_render = False
         bpy.ops.render.render(write_still=True)
         print(f"Rendered {scene.render.filepath}")
