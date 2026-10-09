@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# vite / poko genesis
+/dist
+/dist-ssr
+/test-results
+/playwright-report
+blender/*.blend1
