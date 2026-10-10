@@ -17,6 +17,7 @@ const marquee = [
   "Rust",
   "PostgreSQL",
   "Kubernetes",
+  "SolidJS",
   "React",
   "Docker",
   "Cloudflare",

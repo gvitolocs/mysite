@@ -1,6 +1,6 @@
 # Giuseppe Vitolo's portfolio
 
-Live site: https://gvitolo.vercel.app/
+Live site: https://gvitolo.vercel.app/ · Poko Genesis, the 3D voxel experiment: https://gvitolo.vercel.app/poko/
 
 Static [Astro](https://astro.build) site whose UI is written in [SolidJS](https://www.solidjs.com). Shared copy and project links are in `src/data/content.ts`.
 
@@ -24,6 +24,8 @@ Before publishing:
 npm run check
 npm run build
 ```
+
+`npm run build` also builds [Poko Genesis](poko/README.md) (`poko/`, its own SolidJS + Vite + three.js project) with `BASE_PATH=/poko/` and copies it to `dist/poko/`. `vercel.json` caches its hashed assets as immutable.
 
 `npm run wasm:build` rebuilds `public/wasm/hero_field.wasm`. It needs Rust with the `wasm32-unknown-unknown` target and uses `wasm-opt` when available. The built file is committed, so Vercel builds the site without a Rust toolchain.
 

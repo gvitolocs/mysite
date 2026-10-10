@@ -1,0 +1,62 @@
+{
+  "u0000": {
+    "chapter": "awakening",
+    "calls": 15,
+    "triangles": 99275
+  },
+  "u0100": {
+    "chapter": "awakening",
+    "calls": 16,
+    "triangles": 99277
+  },
+  "u0200": {
+    "chapter": "disintegration",
+    "calls": 17,
+    "triangles": 99279
+  },
+  "u0250": {
+    "chapter": "disintegration",
+    "calls": 17,
+    "triangles": 99279
+  },
+  "u0330": {
+    "chapter": "portal",
+    "calls": 17,
+    "triangles": 99279
+  },
+  "u0400": {
+    "chapter": "portal",
+    "calls": 17,
+    "triangles": 99279
+  },
+  "u0470": {
+    "chapter": "pokoin",
+    "calls": 16,
+    "triangles": 99277
+  },
+  "u0550": {
+    "chapter": "pokoin",
+    "calls": 16,
+    "triangles": 99277
+  },
+  "u0660": {
+    "chapter": "cardrail",
+    "calls": 17,
+    "triangles": 99279
+  },
+  "u0800": {
+    "chapter": "systems",
+    "calls": 16,
+    "triangles": 99277
+  },
+  "u0900": {
+    "chapter": "reconstruction",
+    "calls": 16,
+    "triangles": 99277
+  },
+  "u1000": {
+    "chapter": "finale",
+    "calls": 22,
+    "triangles": 107741
+  }
+}

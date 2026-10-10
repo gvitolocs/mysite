@@ -13,3 +13,5 @@ Astro 7 static site. All UI components are SolidJS (`.tsx`, `jsxImportSource: so
 - Copy and links live in `src/data/content.ts`; facts there are verified, so never invent numbers or features.
 - Run npm commands on nezopt (Linux node_modules): `ssh nezopt 'cd ~/Projects/mysite-revamp && npm run build'`.
   Type check: `npm run check`.
+- `poko/` is a separate project (Poko Genesis: SolidJS + Vite + three.js) served at `/poko/`. It has its own
+  `package.json`, `AGENTS.md` and tests; the root `npm run build` builds it into `dist/poko/`.

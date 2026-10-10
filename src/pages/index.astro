@@ -18,7 +18,7 @@ import cardrailShot from "@/assets/projects/cardrail.webp";
 import prductShot from "@/assets/projects/prduct.webp";
 import type { Shot, Shots } from "@/components/projects/ProjectMedia";
 
-const p = await getImage({ src: portraitSrc, widths: [384, portraitSrc.width], format: "avif" });
+const p = await getImage({ src: portraitSrc, widths: [384, 768, portraitSrc.width], format: "avif" });
 const portrait = { src: p.src, srcset: p.srcSet.attribute, width: 384, height: 384 };
 
 // Project screenshots: real captures of the live sites, resized and converted to AVIF at build time.
