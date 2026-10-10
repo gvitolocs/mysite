@@ -1,4 +1,22 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "astro"
+  "framework": "astro",
+  "redirects": [
+    {
+      "source": "/poko",
+      "destination": "/poko/",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/poko/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
 }

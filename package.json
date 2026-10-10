@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "astro dev --host",
-    "build": "astro build",
+    "build": "astro build && npm run poko:build",
+    "poko:build": "npm ci --prefix poko --no-audit --no-fund && BASE_PATH=/poko/ npm run build --prefix poko && rm -rf dist/poko && cp -R poko/dist dist/poko",
     "preview": "astro preview --host",
     "check": "astro check",
     "cv:sync": "node scripts/sync-cv.mjs",
