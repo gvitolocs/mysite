@@ -305,7 +305,8 @@ export class Experience {
     const w = canvas.clientWidth || window.innerWidth;
     const h = canvas.clientHeight || window.innerHeight;
     const q = this.quality.settings;
-    const ratio = Math.min(window.devicePixelRatio || 1, q.maxPixelRatio) * q.resolutionScale;
+    let ratio = Math.min(window.devicePixelRatio || 1, q.maxPixelRatio) * q.resolutionScale;
+    if (q.pixelBudget) ratio = Math.min(ratio, Math.sqrt((q.pixelBudget * 1e6) / Math.max(1, w * h)));
     this.renderer.setPixelRatio(ratio);
     this.renderer.setSize(w, h, false);
     // At high pixel density the extra pixels already antialias; 4× MSAA on a

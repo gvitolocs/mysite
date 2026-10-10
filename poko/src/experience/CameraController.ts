@@ -13,7 +13,11 @@
  *            camera never stalls in the middle of a continuous move.
  *
  * Framing adapts to aspect ratio: on portrait screens the camera backs away
- * along its view direction until the subject's horizontal extent fits.
+ * along its view direction until the subject's horizontal extent fits. Keys
+ * that name a `subject` (a world's centre) are re-aimed on portrait: desktop
+ * framing puts the sculpture beside the text, a phone puts it above the text,
+ * so the camera centres the subject and lifts it into the upper part of the
+ * screen.
  */
 import * as THREE from 'three';
 import { easeInOutSine } from '../math/easing.ts';
@@ -32,7 +36,12 @@ export interface CameraKey {
   ease?: Ease;
   /** Optional portrait override for position (otherwise derived). */
   portrait?: { position?: [number, number, number]; target?: [number, number, number]; fov?: number };
+  /** What the shot is about. On portrait screens the camera centres it above the text. */
+  subject?: [number, number, number];
 }
+
+/** Portrait: how far above the screen centre a subject sits (fraction of the half-height). */
+const PORTRAIT_LIFT = 0.32;
 
 const EASE: Record<Ease, (t: number) => number> = {
   settle: easeInOutSine,
@@ -56,6 +65,7 @@ export class CameraTrack {
   private readonly portraitPositions: THREE.CatmullRomCurve3;
   private readonly portraitTargets: THREE.CatmullRomCurve3;
   private readonly portraitFovs: number[];
+  private readonly lifts: number[];
 
   constructor(keys: CameraKey[]) {
     const sorted = [...keys].map((k) => ({ ...k, u: progressFor(k.chapter, k.at) })).sort((a, b) => a.u - b.u);
@@ -66,8 +76,9 @@ export class CameraTrack {
     this.positions = new THREE.CatmullRomCurve3(sorted.map((k) => v(k.position)), false, 'centripetal');
     this.targets = new THREE.CatmullRomCurve3(sorted.map((k) => v(k.target)), false, 'centripetal');
     this.portraitPositions = new THREE.CatmullRomCurve3(sorted.map((k) => v(k.portrait?.position ?? k.position)), false, 'centripetal');
-    this.portraitTargets = new THREE.CatmullRomCurve3(sorted.map((k) => v(k.portrait?.target ?? k.target)), false, 'centripetal');
+    this.portraitTargets = new THREE.CatmullRomCurve3(sorted.map((k) => v(k.portrait?.target ?? k.subject ?? k.target)), false, 'centripetal');
     this.portraitFovs = sorted.map((k) => k.portrait?.fov ?? k.fov);
+    this.lifts = sorted.map((k) => (k.subject && !k.portrait?.target ? PORTRAIT_LIFT : 0));
   }
 
   /** Spline parameter for global progress u (pure function). */
@@ -94,6 +105,14 @@ export class CameraTrack {
       const k = Math.pow(1.25 / Math.max(aspect, 0.4), 0.72);
       out.position.sub(out.target).multiplyScalar(k).add(out.target);
       out.fov = Math.min(out.fov * (portrait ? 1.08 : 1), 60);
+    }
+    if (portrait) {
+      // Aim below the subject so it rises into the upper part of the frame.
+      const lift = this.lifts[segment] + (this.lifts[Math.min(segment + 1, this.lifts.length - 1)] - this.lifts[segment]) * local;
+      if (lift > 0) {
+        const distance = out.position.distanceTo(out.target);
+        out.target.y -= distance * Math.tan(THREE.MathUtils.degToRad(out.fov / 2)) * lift;
+      }
     }
     return out;
   }
