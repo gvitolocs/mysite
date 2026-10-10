@@ -24,12 +24,19 @@ export interface QualitySettings {
   dustCount: number;
   /** Render-resolution multiplier applied on top of the pixel-ratio cap. */
   resolutionScale: number;
+  /**
+   * Optional cap on rendered megapixels. A small phone screen can then render
+   * sharp (high pixel ratio) while a large desktop window on the same tier
+   * stays cheap: cost follows pixels, not the ratio.
+   */
+  pixelBudget?: number;
 }
 
 export const TIERS: Record<QualityTier, QualitySettings> = {
   high: { tier: 'high', maxPixelRatio: 2, msaa: 4, shadows: true, shadowMapSize: 2048, bloom: true, dustCount: 420, resolutionScale: 1 },
   medium: { tier: 'medium', maxPixelRatio: 1.5, msaa: 2, shadows: true, shadowMapSize: 1024, bloom: true, dustCount: 260, resolutionScale: 1 },
-  low: { tier: 'low', maxPixelRatio: 1, msaa: 0, shadows: false, shadowMapSize: 512, bloom: false, dustCount: 120, resolutionScale: 0.85 },
+  // ~0.95 MP: a 1440 × 900 window renders at ~0.86× (as before); a phone at ~1.9× instead of 0.85×.
+  low: { tier: 'low', maxPixelRatio: 2, msaa: 0, shadows: false, shadowMapSize: 512, bloom: false, dustCount: 120, resolutionScale: 1, pixelBudget: 0.95 },
 };
 
 const ORDER: QualityTier[] = ['low', 'medium', 'high'];
@@ -47,6 +54,8 @@ export function initialTier(device: DeviceProfile): QualityTier {
   const gpu = device.gpu.toLowerCase();
   const weakGpu = /swiftshader|llvmpipe|software|mali-4|mali-t|adreno \(tm\) [345]\d\d|powervr|intel\(r\) (hd|uhd) graphics [2-5]\d{2}\b/.test(gpu);
   if (weakGpu) return 'low';
+  // iOS Safari reports neither real core counts nor memory; Apple GPUs handle the medium tier.
+  if (device.mobile && /apple/.test(gpu)) return 'medium';
   if (device.mobile) return device.cores >= 6 && (device.memoryGb ?? 4) >= 4 ? 'medium' : 'low';
   if (device.cores <= 4 || (device.memoryGb !== null && device.memoryGb < 4)) return 'medium';
   return 'high';

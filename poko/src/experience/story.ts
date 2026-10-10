@@ -42,11 +42,10 @@ const KEYS: CameraKey[] = [
   { chapter: 'awakening', at: 0, position: [0, 0.8, 9.6], target: [0, 0.6, 0], fov: 21, portrait: { position: [0, 1.1, 9.6], target: [0, 0.55, 0] } },
   { chapter: 'awakening', at: 0.55, position: [1.4, 1.3, 8.6], target: [0, 1.0, 0], fov: 26 },
   { chapter: 'awakening', at: 1, position: [3.0, 1.85, 7.3], target: [0, 1.25, 0], fov: 30 },
-  // Disintegration: keep orbiting the same voxel Poko like a turntable in
-  // Blender (right → front → left, radius ~7.5), then he comes apart.
-  { chapter: 'disintegration', at: 0.1, position: [0, 1.85, 7.6], target: [0, 1.3, 0], fov: 30 },
-  { chapter: 'disintegration', at: 0.22, position: [-3.2, 1.75, 6.9], target: [0, 1.3, 0], fov: 30 },
-  { chapter: 'disintegration', at: 0.6, position: [-1.4, 2.5, 8.8], target: [0, 1.55, 0], fov: 34 },
+  // Disintegration: a slow turntable drift around the same voxel Poko (about
+  // 20° in all), then he comes apart. Faster or wider swings read as spinning.
+  { chapter: 'disintegration', at: 0.22, position: [1.3, 1.7, 7.4], target: [0, 1.3, 0], fov: 30 },
+  { chapter: 'disintegration', at: 0.6, position: [-0.6, 2.4, 8.6], target: [0, 1.55, 0], fov: 34 },
   { chapter: 'disintegration', at: 1, position: [1.8, 4.3, 9.6], target: [0, 1.7, -1], fov: 38 },
   // Portal: follow the stream, enter the tunnel.
   { chapter: 'portal', at: 0.32, position: [8.2, 4.4, 5.2], target: [0.5, 1.9, -8], fov: 40, ease: 'glide' },
@@ -54,24 +53,24 @@ const KEYS: CameraKey[] = [
   { chapter: 'portal', at: 1, position: [0, 1.9, -23], target: [0, 1.9, -36], fov: 54, ease: 'glide' },
   // World A: Pokoin
   { chapter: 'pokoin', at: 0.12, position: [0, 2.1, -30.5], target: [0, 2.4, -44], fov: 46, ease: 'out' },
-  { chapter: 'pokoin', at: 0.45, position: [-0.6, 2.6, -34.2], target: [-1.5, 2.5, -44], fov: 37 },
-  { chapter: 'pokoin', at: 0.86, position: [1.2, 2.7, -35.0], target: [-1.3, 2.5, -44], fov: 36, ease: 'in' },
+  { chapter: 'pokoin', at: 0.45, position: [-0.6, 2.6, -34.2], target: [-1.5, 2.5, -44], fov: 37, subject: [0, 2.5, -44] },
+  { chapter: 'pokoin', at: 0.86, position: [1.2, 2.7, -35.0], target: [-1.3, 2.5, -44], fov: 36, ease: 'in', subject: [0, 2.5, -44] },
   // Flight to World B, tracked along the path, then the CardRails hero shots.
   { chapter: 'cardrail', at: 0.22, position: [6.6, 3.6, -40.8], target: [4.6, 1.8, -52], fov: 40, ease: 'out' },
-  { chapter: 'cardrail', at: 0.5, position: [2.6, 2.6, -50.2], target: [5.2, 1.4, -60], fov: 42 },
-  { chapter: 'cardrail', at: 0.88, position: [6.8, 2.3, -50.8], target: [5.2, 1.5, -60], fov: 41, ease: 'in' },
+  { chapter: 'cardrail', at: 0.5, position: [2.6, 2.6, -50.2], target: [5.2, 1.4, -60], fov: 42, subject: [7, 1.7, -60] },
+  { chapter: 'cardrail', at: 0.88, position: [6.8, 2.3, -50.8], target: [5.2, 1.5, -60], fov: 41, ease: 'in', subject: [7, 1.7, -60] },
   // Flight to World C: the prduct pilot, off to the left of the path.
   { chapter: 'prduct', at: 0.22, position: [2.2, 3.8, -61.5], target: [-4.2, 1.8, -70], fov: 40, ease: 'out' },
-  { chapter: 'prduct', at: 0.5, position: [-1.2, 2.6, -67.8], target: [-8.4, 1.8, -76], fov: 40 },
-  { chapter: 'prduct', at: 0.88, position: [-6.0, 2.8, -65.4], target: [-7.0, 1.8, -76], fov: 44, ease: 'in' },
+  { chapter: 'prduct', at: 0.5, position: [-1.2, 2.6, -67.8], target: [-8.4, 1.8, -76], fov: 40, subject: [-6.1, 1.9, -76] },
+  { chapter: 'prduct', at: 0.88, position: [-6.0, 2.8, -65.4], target: [-7.0, 1.8, -76], fov: 44, ease: 'in', subject: [-6.1, 1.9, -76] },
   // Flight to World D: the Tmelnik app, back to the right.
   { chapter: 'tmelnik', at: 0.22, position: [-4.0, 4.0, -77.5], target: [2.6, 2.0, -86], fov: 40, ease: 'out' },
-  { chapter: 'tmelnik', at: 0.5, position: [3.6, 2.7, -84.2], target: [4.4, 2.4, -92], fov: 40 },
-  { chapter: 'tmelnik', at: 0.88, position: [8.4, 2.9, -84.6], target: [4.8, 2.4, -92], fov: 40, ease: 'in' },
+  { chapter: 'tmelnik', at: 0.5, position: [3.6, 2.7, -84.2], target: [4.4, 2.4, -92], fov: 40, subject: [6.4, 2.4, -92] },
+  { chapter: 'tmelnik', at: 0.88, position: [8.4, 2.9, -84.6], target: [4.8, 2.4, -92], fov: 40, ease: 'in', subject: [6.4, 2.4, -92] },
   // Flight to World E: systems
   { chapter: 'systems', at: 0.22, position: [8.6, 3.9, -90.5], target: [3.5, 2.0, -101], fov: 40, ease: 'out' },
-  { chapter: 'systems', at: 0.5, position: [-3.4, 4.7, -99.4], target: [0, 2.2, -108], fov: 38 },
-  { chapter: 'systems', at: 0.88, position: [2.9, 3.7, -100.4], target: [0, 2.0, -108], fov: 36, ease: 'in' },
+  { chapter: 'systems', at: 0.5, position: [-3.4, 4.7, -99.4], target: [0, 2.2, -108], fov: 38, subject: [0, 2.0, -108] },
+  { chapter: 'systems', at: 0.88, position: [2.9, 3.7, -100.4], target: [0, 2.0, -108], fov: 36, ease: 'in', subject: [0, 2.0, -108] },
   // Return: track the fragments home, then frame Poko under his name.
   { chapter: 'reconstruction', at: 0.25, position: [3.4, 4.3, -106.5], target: [0, 1.7, -118], fov: 40, ease: 'out' },
   { chapter: 'reconstruction', at: 0.65, position: [-2.6, 2.5, -117.4], target: [0, 1.7, -126], fov: 36 },
@@ -220,20 +219,22 @@ const SCRIPT: Record<ChapterId, Writer> = {
       ...DEFAULT_MORPH,
       from: 'poko',
       to: 'cloud',
-      toPlacement: cloudPlacement(m * 0.9),
+      toPlacement: cloudPlacement(m * 0.45),
       t: easeInOutCubic(m) * 0.5 + m * 0.5,
       spread: 0.8,
       delayAxis: [0, -1 / 2.8, 0, 1],
       delayWeights: { axis: 0.7, depth: 1, seed: 0.55 },
       center: [0, POKO_CENTER_Y, 0],
       explode: 1.1,
+      // Gentle on purpose: a big swirl plus fast tumbling read as the whole
+      // character spinning away instead of coming apart.
       swirlAxis: [0, 0, 1],
-      swirlAngle: 1.5,
+      swirlAngle: 0.55,
       swirlCenter: [0, POKO_CENTER_Y, 0],
       noiseAmp: 0.55,
       noiseFreq: 0.75,
       clump: 0.9,
-      spin: 4.2,
+      spin: 1.8,
       transitScale: 0.85,
       vibrate: 0.025,
       glow: 0.75,
@@ -253,7 +254,7 @@ const SCRIPT: Record<ChapterId, Writer> = {
         ...DEFAULT_MORPH,
         from: 'cloud',
         to: LAYER_STREAM,
-        fromPlacement: cloudPlacement(0.9 + m * 0.4),
+        fromPlacement: cloudPlacement(0.45 + m * 0.4),
         t: m,
         spread: 0.6,
         delayWeights: { axis: 0, depth: 0, seed: 1 },
