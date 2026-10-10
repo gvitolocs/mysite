@@ -39,7 +39,7 @@ export const about = {
   highlights: [
     { label: "Education", value: "MSc Computer Engineering, Aarhus University" },
     { label: "Based in", value: "Aarhus, Denmark" },
-    { label: "Working with", value: "Rust · PostgreSQL · Kubernetes · React" },
+    { label: "Working with", value: "Rust · PostgreSQL · Kubernetes · SolidJS" },
   ],
 };
 
@@ -52,8 +52,8 @@ export const experience: ExperienceItem[] = [
   {
     id: "pokoin", kind: "work", title: "Backend & data engineering",
     org: "Pokoin · Independent project", period: "2026", location: "Aarhus, Denmark",
-    summary: "Built marketplace APIs and React interfaces, shipped autocomplete in Rust, and configured Kubernetes API overflow with PostgreSQL writer/replica separation. Optimized the home feed with edge caching and request coalescing, and developed transactional imports for large catalog and price datasets.",
-    tags: ["Rust", "PostgreSQL", "Kubernetes", "React", "Data pipelines"],
+    summary: "Built marketplace APIs and web interfaces (SolidJS, migrated from React), shipped autocomplete in Rust, and configured Kubernetes API overflow with PostgreSQL writer/replica separation. Optimized the home feed with edge caching and request coalescing, and developed transactional imports for large catalog and price datasets.",
+    tags: ["Rust", "PostgreSQL", "Kubernetes", "SolidJS", "Data pipelines"],
   },
   {
     id: "prduct", kind: "internship", title: "B2B software development",
@@ -103,13 +103,13 @@ export const projects: Project[] = [
   {
     id: "pokoin", name: "Pokoin", tagline: "Marketplace",
     outcome: "Trading-card discovery, pricing and seller workflows.",
-    description: "A marketplace with React web interfaces, shared APIs and provider-data integrations. I shipped autocomplete in Rust using Axum, Tokio and SQLx, configured Kubernetes overflow and PostgreSQL read replicas, and optimized the home feed through edge caching and request coalescing.",
+    description: "A marketplace with SolidJS web interfaces, shared APIs and provider-data integrations. I shipped autocomplete in Rust using Axum, Tokio and SQLx, configured Kubernetes overflow and PostgreSQL read replicas, and optimized the home feed through edge caching and request coalescing.",
     metrics: [
       { value: "6.9 s → 26 ms", label: "Home-feed median latency" },
       { value: "1.3 → 284 req/s", label: "Home-feed throughput" },
     ],
     measurementNote: "29 Sep 2026 load test, 8 concurrent requests: direct Pi API baseline compared with the serving path through the cached edge.",
-    stack: ["Rust", "Axum", "PostgreSQL", "Kubernetes", "React", "Cloudflare"],
+    stack: ["Rust", "Axum", "PostgreSQL", "Kubernetes", "SolidJS", "Cloudflare"],
     links: [{ label: "Visit Pokoin", href: "https://pokoin.com" }], accent: "teal",
     media: { kind: "screenshot", image: "pokoin", host: "pokoin.com", alt: "Pokoin home page: “The market belongs to the collectors.”" },
     compare: [
@@ -177,7 +177,7 @@ export const skills = {
   categories: [
     { name: "Programming", items: ["Rust", "Python", "Java", "JavaScript", "Dart", "SQL"] },
     { name: "Backend & data", items: ["Axum / Tokio / SQLx", "PostgreSQL", "MySQL", "REST APIs", "Data pipelines"] },
-    { name: "Infrastructure & web", items: ["Kubernetes (k3s)", "Docker", "Linux", "Cloudflare", "React", "Git"] },
+    { name: "Infrastructure & web", items: ["Kubernetes (k3s)", "Docker", "Linux", "Cloudflare", "SolidJS", "React", "Git"] },
     { name: "Systems & security", items: ["Distributed systems", "Cryptography", "Formal verification", "Software correctness"] },
   ],
 };
