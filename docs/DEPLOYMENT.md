@@ -1,28 +1,40 @@
 # Deployment and rollback
 
 The site is a static build (`dist/`): prerendered HTML per route plus hashed,
-immutable assets. There is no server code. It deploys to the existing Vercel
-project `mysite` (production domain `gvitolo.vercel.app`), as before.
+immutable assets. There is no server code.
 
-## What changed in the deployment setup
+## Where it is live: `/poko/` next to the main site
 
-| | Before (main) | Poko Genesis |
-|---|---|---|
-| Framework | Next.js 16 | Vite 8 + SolidJS (static) |
-| `vercel.json` | `framework: nextjs` | `framework: vite`, `buildCommand: npm run build`, `outputDirectory: dist`, immutable cache headers for `/assets/*` |
-| Install | `npm ci` | `npm ci` (`.npmrc` sets `legacy-peer-deps=true` to avoid an npm arborist crash on Vitest's optional peers) |
-| Node | 20+ | 22.18+ (`engines`) |
+Poko Genesis currently ships as a sub-path of the main portfolio, in the
+existing Vercel project `mysite` (production domain `gvitolo.vercel.app`):
 
-## Promote
+* the repository root is the main site (Astro); this project lives in `poko/`;
+* the root `npm run build` runs `astro build`, then builds this project with
+  `BASE_PATH=/poko/` and copies its `dist/` to `dist/poko/`;
+* the root `vercel.json` adds immutable caching for `/poko/assets/*` and
+  redirects `/poko` to `/poko/`.
 
-1. Open the pull request from `claude/admiring-gates-mgebqm`. Vercel builds a
-   **preview deployment** for it automatically. Review it on a real GPU,
-   desktop and phone.
-2. Check locally if wanted:
-   ```sh
-   npm ci && npm test && npm run build && npm run test:e2e
-   ```
-3. Merge to `main`. Vercel builds and promotes to production.
+`BASE_PATH` (default `/`) sets Vite's `base`. Internal links go through
+`withBase()` in `src/app/base.ts`, so the same source builds for the domain
+root or any sub-path. The canonical URLs, Open Graph image and sitemap use the
+base; `robots.txt` is only written for a root deployment.
+
+```sh
+cd poko && BASE_PATH=/poko/ npm run build    # dist/ for /poko/
+BASE_PATH=/poko/ npx vite preview            # serves it at /poko/
+```
+
+The e2e suite runs against a root build (`npm run build && npm run test:e2e`).
+
+## Promote to the domain root (replacing the main site)
+
+1. Move this project's files back to the repository root (or point the Vercel
+   project's root directory at `poko/`) and restore its own `vercel.json`
+   (`framework: vite`, `outputDirectory: dist`, immutable `/assets/*`).
+2. Build with the default `BASE_PATH` and run
+   `npm ci && npm test && npm run build && npm run test:e2e`.
+3. Review the Vercel preview on a real GPU, desktop and phone, then merge to
+   `main`.
 4. Smoke-test production: `/`, `/work/`, `/work/pokoin/`, `/about/`, `/cv.pdf`,
    `/sitemap.xml`, plus the home page with `?static` (fallback) and with
    reduced motion enabled.
@@ -30,9 +42,9 @@ project `mysite` (production domain `gvitolo.vercel.app`), as before.
 ## Roll back
 
 Fastest, with no rebuild: in the Vercel dashboard (Project → Deployments),
-pick the last Next.js production deployment and choose **Promote to
-Production** (or `vercel rollback <deployment-url>` with the CLI). The domain
-switches back instantly.
+pick the previous production deployment and choose **Promote to Production**
+(or `vercel rollback <deployment-url>` with the CLI). The domain switches back
+instantly.
 
 In git, so `main` matches what is live:
 
@@ -41,8 +53,8 @@ git revert -m 1 <merge-commit-sha>   # creates a revert commit; history stays in
 git push origin main
 ```
 
-The Next.js site lives untouched on `main` until the merge, and in history
-afterwards.
+To take down only `/poko/`, remove the `poko:build` step from the root
+`build` script; the main site is unaffected.
 
 ## Cloudflare Pages (alternative)
 

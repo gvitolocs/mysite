@@ -1,6 +1,7 @@
 /** Prerendered routes and their metadata. Each becomes dist/<path>/index.html. */
 import { CASE_STUDIES } from '../content/caseStudies.ts';
 import { site } from '../content/content.ts';
+import { BASE } from './base.ts';
 
 export const SITE_URL = 'https://gvitolo.vercel.app';
 
@@ -33,7 +34,7 @@ export function resolveRoute(pathname: string): Route {
 const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
 export function headFor(route: Route, ogImage: string): string {
-  const url = SITE_URL + (route.page === 'notfound' ? '/' : route.path);
+  const url = SITE_URL + BASE + (route.page === 'notfound' ? '/' : route.path);
   const tags = [
     `<title>${escape(route.title)}</title>`,
     `<meta name="description" content="${escape(route.description)}">`,
@@ -53,7 +54,7 @@ export function headFor(route: Route, ogImage: string): string {
       jobTitle: 'Software engineer',
       address: { '@type': 'PostalAddress', addressLocality: 'Aarhus', addressCountry: 'DK' },
       alumniOf: ['Aarhus University', 'University of Salerno'],
-      url: SITE_URL,
+      url: `${SITE_URL}${BASE}/`,
       sameAs: [site.social.github, site.social.linkedin],
     };
     tags.push(`<script type="application/ld+json">${JSON.stringify(person).replace(/</g, '\\u003c')}</script>`);

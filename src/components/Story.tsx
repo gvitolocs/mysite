@@ -10,6 +10,7 @@
 import { For, Show } from 'solid-js';
 import { CHAPTERS, type Chapter, type ChapterId } from '../content/chapters.ts';
 import { chapter, overlay, status } from '../app/store.ts';
+import { withBase } from '../app/base.ts';
 
 function ChapterSection(props: { chapter: Chapter; index: number }) {
   const c = props.chapter;
@@ -32,7 +33,7 @@ function ChapterSection(props: { chapter: Chapter; index: number }) {
               <For each={c.links}>
                 {(l) => (
                   <li>
-                    <a href={l.href} rel={l.external ? 'noopener' : undefined}>
+                    <a href={withBase(l.href)} rel={l.external ? 'noopener' : undefined}>
                       {l.label}
                       <span aria-hidden="true" class="arrow">{l.external ? '↗' : '→'}</span>
                     </a>

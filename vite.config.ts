@@ -2,7 +2,9 @@
 import { defineConfig } from 'vite';
 import solid from 'vite-plugin-solid';
 
+// BASE_PATH=/poko/ serves the site from a sub-path (see docs/DEPLOYMENT.md).
 export default defineConfig(({ isSsrBuild }) => ({
+  base: process.env.BASE_PATH ?? '/',
   plugins: [solid({ ssr: true })],
   build: {
     target: 'es2022',

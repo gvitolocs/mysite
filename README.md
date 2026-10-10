@@ -7,7 +7,7 @@ scanning rack and a systems diagram, and finally reassembles under the name it
 spells in voxels. Every frame is a pure function of the scroll position, so the
 whole journey plays backward exactly.
 
-Live (current production): https://gvitolo.vercel.app/
+Live at https://gvitolo.vercel.app/poko/ (a sub-path of the main portfolio; see `docs/DEPLOYMENT.md`).
 
 ![Poko Genesis](docs/media/gallery/u0250.jpg)
 

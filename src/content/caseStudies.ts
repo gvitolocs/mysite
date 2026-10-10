@@ -42,7 +42,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       {
         heading: 'What I built',
         bullets: [
-          'Marketplace APIs and React interfaces; the site is deployed on Cloudflare.',
+          'Marketplace APIs and SolidJS web interfaces (migrated from React); the site is deployed on Cloudflare.',
           'Autocomplete in Rust (Axum, Tokio, SQLx): the verified production migration covers autocomplete, not every route.',
           'Kubernetes (k3s) API overflow and health-based failover, with PostgreSQL writer/replica separation for consistent writes and distributed reads.',
           'Home-feed serving path through the cached edge with request coalescing.',

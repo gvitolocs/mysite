@@ -1,6 +1,7 @@
 import { For } from 'solid-js';
 import { site } from '../content/content.ts';
 import { PokoMark } from './PokoMark.tsx';
+import { withBase } from '../app/base.ts';
 
 const NAV = [
   { label: 'Work', href: '/work/', key: 'work' },
@@ -12,7 +13,7 @@ const NAV = [
 export function SiteHeader(props: { current: string }) {
   return (
     <header class="site-header">
-      <a class="brand" href="/" aria-label={`${site.name}, home`}>
+      <a class="brand" href={withBase('/')} aria-label={`${site.name}, home`}>
         <PokoMark size={22} />
         <span class="brand__name">{site.name}</span>
       </a>
@@ -21,7 +22,7 @@ export function SiteHeader(props: { current: string }) {
           <For each={NAV}>
             {(item) => (
               <li>
-                <a href={item.href} aria-current={props.current === item.key ? 'page' : undefined}>
+                <a href={withBase(item.href)} aria-current={props.current === item.key ? 'page' : undefined}>
                   {item.label}
                 </a>
               </li>

@@ -4,6 +4,7 @@ import { CASE_STUDIES } from '../../content/caseStudies.ts';
 import { about, contact, experience, guidingPrinciples, projects, site, skills } from '../../content/content.ts';
 import { PokoMark } from '../../components/PokoMark.tsx';
 import { SiteFooter, SiteHeader } from '../../components/SiteChrome.tsx';
+import { withBase } from '../base.ts';
 
 const caseSlug: Record<string, string> = { pokoin: 'pokoin', cardrail: 'cardrail', 'price-pipelines': 'systems' };
 
@@ -51,9 +52,9 @@ export function WorkIndex() {
               <p class="stack">{p.stack.join(' · ')}</p>
               <ul class="link-row">
                 <Show when={caseSlug[p.id]}>
-                  <li><a href={`/work/${caseSlug[p.id]}/`}>Case study →</a></li>
+                  <li><a href={withBase(`/work/${caseSlug[p.id]}/`)}>Case study →</a></li>
                 </Show>
-                <For each={p.links}>{(l) => <li><a href={l.href}>{l.label} ↗</a></li>}</For>
+                <For each={p.links}>{(l) => <li><a href={withBase(l.href)}>{l.label} ↗</a></li>}</For>
               </ul>
             </li>
           )}
@@ -105,8 +106,8 @@ export function CaseStudyPage(props: { slug: string }) {
           <h2>Stack</h2>
           <p class="stack">{c.stack.join(' · ')}</p>
           <ul class="link-row">
-            <For each={c.links}>{(l) => <li><a href={l.href}>{l.label} ↗</a></li>}</For>
-            <li><a href="/work/">All work →</a></li>
+            <For each={c.links}>{(l) => <li><a href={withBase(l.href)}>{l.label} ↗</a></li>}</For>
+            <li><a href={withBase('/work/')}>All work →</a></li>
           </ul>
         </section>
       </article>
@@ -122,7 +123,7 @@ export function AboutPage() {
           <p class="kicker">{about.eyebrow}</p>
           <h1>{about.title}</h1>
         </div>
-        <img class="portrait" src={site.avatarUrl} width="220" height="220" alt={`Portrait of ${site.name}`} loading="lazy" decoding="async" />
+        <img class="portrait" src={withBase(site.avatarUrl)} width="220" height="220" alt={`Portrait of ${site.name}`} loading="lazy" decoding="async" />
       </header>
       <section class="prose">
         <For each={about.paragraphs}>{(p) => <p>{p}</p>}</For>
@@ -173,7 +174,7 @@ export function AboutPage() {
         <p>{contact.body}</p>
         <ul class="link-row">
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          <li><a href="/cv.pdf">CV (PDF)</a></li>
+          <li><a href={withBase('/cv.pdf')}>CV (PDF)</a></li>
           <li><a href={site.social.github}>GitHub ↗</a></li>
           <li><a href={site.social.linkedin}>LinkedIn ↗</a></li>
         </ul>
@@ -189,7 +190,7 @@ export function NotFound() {
       <header class="page-hero page-hero--center">
         <PokoMark size={104} title="Poko" />
         <h1>Lost a pixel</h1>
-        <p class="lede">This page does not exist. Poko suggests the <a href="/">home page</a> or the <a href="/work/">work index</a>.</p>
+        <p class="lede">This page does not exist. Poko suggests the <a href={withBase('/')}>home page</a> or the <a href={withBase('/work/')}>work index</a>.</p>
       </header>
     </PageShell>
   );

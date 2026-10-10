@@ -1,8 +1,9 @@
 # Working on this repository
 
 Giuseppe Vitolo's portfolio, "Poko Genesis": SolidJS + Vite + three.js,
-prerendered to static HTML. **This is not a Next.js project any more** (the
-Next.js site lives in git history and on `main` until the redesign is merged).
+prerendered to static HTML. In the `mysite` repository it lives in `poko/` and
+is served at `/poko/` next to the main (Astro) site; see `docs/DEPLOYMENT.md`.
+Internal links must go through `withBase()` (`src/app/base.ts`).
 
 Read `docs/POKO_GENESIS_ENGINEERING.md` before changing the 3D experience.
 
