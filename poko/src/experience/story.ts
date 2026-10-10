@@ -42,11 +42,10 @@ const KEYS: CameraKey[] = [
   { chapter: 'awakening', at: 0, position: [0, 0.8, 9.6], target: [0, 0.6, 0], fov: 21, portrait: { position: [0, 1.1, 9.6], target: [0, 0.55, 0] } },
   { chapter: 'awakening', at: 0.55, position: [1.4, 1.3, 8.6], target: [0, 1.0, 0], fov: 26 },
   { chapter: 'awakening', at: 1, position: [3.0, 1.85, 7.3], target: [0, 1.25, 0], fov: 30 },
-  // Disintegration: keep orbiting the same voxel Poko like a turntable in
-  // Blender (right → front → left, radius ~7.5), then he comes apart.
-  { chapter: 'disintegration', at: 0.1, position: [0, 1.85, 7.6], target: [0, 1.3, 0], fov: 30 },
-  { chapter: 'disintegration', at: 0.22, position: [-3.2, 1.75, 6.9], target: [0, 1.3, 0], fov: 30 },
-  { chapter: 'disintegration', at: 0.6, position: [-1.4, 2.5, 8.8], target: [0, 1.55, 0], fov: 34 },
+  // Disintegration: a slow turntable drift around the same voxel Poko (about
+  // 20° in all), then he comes apart. Faster or wider swings read as spinning.
+  { chapter: 'disintegration', at: 0.22, position: [1.3, 1.7, 7.4], target: [0, 1.3, 0], fov: 30 },
+  { chapter: 'disintegration', at: 0.6, position: [-0.6, 2.4, 8.6], target: [0, 1.55, 0], fov: 34 },
   { chapter: 'disintegration', at: 1, position: [1.8, 4.3, 9.6], target: [0, 1.7, -1], fov: 38 },
   // Portal: follow the stream, enter the tunnel.
   { chapter: 'portal', at: 0.32, position: [8.2, 4.4, 5.2], target: [0.5, 1.9, -8], fov: 40, ease: 'glide' },
@@ -220,20 +219,22 @@ const SCRIPT: Record<ChapterId, Writer> = {
       ...DEFAULT_MORPH,
       from: 'poko',
       to: 'cloud',
-      toPlacement: cloudPlacement(m * 0.9),
+      toPlacement: cloudPlacement(m * 0.45),
       t: easeInOutCubic(m) * 0.5 + m * 0.5,
       spread: 0.8,
       delayAxis: [0, -1 / 2.8, 0, 1],
       delayWeights: { axis: 0.7, depth: 1, seed: 0.55 },
       center: [0, POKO_CENTER_Y, 0],
       explode: 1.1,
+      // Gentle on purpose: a big swirl plus fast tumbling read as the whole
+      // character spinning away instead of coming apart.
       swirlAxis: [0, 0, 1],
-      swirlAngle: 1.5,
+      swirlAngle: 0.55,
       swirlCenter: [0, POKO_CENTER_Y, 0],
       noiseAmp: 0.55,
       noiseFreq: 0.75,
       clump: 0.9,
-      spin: 4.2,
+      spin: 1.8,
       transitScale: 0.85,
       vibrate: 0.025,
       glow: 0.75,
@@ -253,7 +254,7 @@ const SCRIPT: Record<ChapterId, Writer> = {
         ...DEFAULT_MORPH,
         from: 'cloud',
         to: LAYER_STREAM,
-        fromPlacement: cloudPlacement(0.9 + m * 0.4),
+        fromPlacement: cloudPlacement(0.45 + m * 0.4),
         t: m,
         spread: 0.6,
         delayWeights: { axis: 0, depth: 0, seed: 1 },

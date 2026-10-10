@@ -65,13 +65,16 @@ const SCAN_FRAGMENT = /* glsl */ `
 uniform float uTime;
 uniform float uStrength;
 varying vec2 vUv;
+// A clean line with a soft trail. No stripe texture or stepped rows: at the
+// gate's on-screen size those aliased into moiré and read as a glitch.
 void main() {
-  float y = floor(vUv.y * 46.0) / 46.0;
   float sweep = fract(uTime * 0.45);
-  float band = exp(-pow((y - sweep) * 18.0, 2.0));
-  float trail = smoothstep(sweep - 0.35, sweep, y) * step(y, sweep) * 0.18;
-  float lines = 0.6 + 0.4 * step(0.5, fract(vUv.y * 92.0));
-  vec3 c = vec3(0.36, 0.88, 0.9) * (band * 2.2 + trail) * lines;
+  float y = vUv.y;
+  float band = exp(-pow((y - sweep) * 26.0, 2.0));
+  float trail = smoothstep(sweep - 0.3, sweep, y) * step(y, sweep) * 0.12;
+  // Fade in at the bottom and out at the top, so the wrap-around never jumps.
+  float ends = smoothstep(0.0, 0.08, sweep) * (1.0 - smoothstep(0.9, 1.0, sweep));
+  vec3 c = vec3(0.36, 0.88, 0.9) * (band * 2.0 + trail) * ends;
   gl_FragColor = vec4(c * uStrength, 1.0);
 }`;
 

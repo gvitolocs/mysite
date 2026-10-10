@@ -113,6 +113,6 @@ export function buildCardRails(): CardRailsFormation {
   const shift = (minX + maxX) / 2;
   for (let i = 0; i < targets.count; i++) targets.positions[i * 3] -= shift;
   // The opening spans x ∈ (GX-7, GX+7) and y ∈ [0, 24) in voxels.
-  const gate = { center: [GX * VOXEL_SIZE - shift, 12 * VOXEL_SIZE, 0.05] as [number, number, number], width: 13 * VOXEL_SIZE, height: 23 * VOXEL_SIZE };
+  const gate = { center: [GX * VOXEL_SIZE - shift, 12 * VOXEL_SIZE, 0.12] as [number, number, number], width: 13 * VOXEL_SIZE, height: 23 * VOXEL_SIZE };
   return { targets, gate };
 }
