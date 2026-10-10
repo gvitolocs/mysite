@@ -42,8 +42,10 @@ const KEYS: CameraKey[] = [
   { chapter: 'awakening', at: 0, position: [0, 0.8, 9.6], target: [0, 0.6, 0], fov: 21, portrait: { position: [0, 1.1, 9.6], target: [0, 0.55, 0] } },
   { chapter: 'awakening', at: 0.55, position: [1.4, 1.3, 8.6], target: [0, 1.0, 0], fov: 26 },
   { chapter: 'awakening', at: 1, position: [3.0, 1.85, 7.3], target: [0, 1.25, 0], fov: 30 },
-  // Disintegration
-  { chapter: 'disintegration', at: 0.22, position: [2.2, 1.55, 6.3], target: [0, 1.3, 0], fov: 30 },
+  // Disintegration: keep orbiting the same voxel Poko like a turntable in
+  // Blender (right → front → left, radius ~7.5), then he comes apart.
+  { chapter: 'disintegration', at: 0.1, position: [0, 1.85, 7.6], target: [0, 1.3, 0], fov: 30 },
+  { chapter: 'disintegration', at: 0.22, position: [-3.2, 1.75, 6.9], target: [0, 1.3, 0], fov: 30 },
   { chapter: 'disintegration', at: 0.6, position: [-1.4, 2.5, 8.8], target: [0, 1.55, 0], fov: 34 },
   { chapter: 'disintegration', at: 1, position: [1.8, 4.3, 9.6], target: [0, 1.7, -1], fov: 38 },
   // Portal: follow the stream, enter the tunnel.
@@ -104,7 +106,11 @@ export interface StoryFrame {
   stream: StreamParams | null;
   /** Awakening: 0 = flat pixel art, 1 = full volume. */
   depth: number;
-  /** Which representation draws Poko when he is whole. */
+  /**
+   * Draw Poko with the skinned GLB mesh instead of the voxel pool. The story
+   * keeps it false: Poko is the same voxels from the first frame to the last,
+   * so nothing is ever swapped. (The GLB still drives the bones.)
+   */
   pokoSkinned: boolean;
   /** Draw the voxel pool at all. */
   voxels: boolean;
@@ -195,7 +201,6 @@ const SCRIPT: Record<ChapterId, Writer> = {
   },
 
   disintegration(t, f) {
-    const whole = t < 0.24;
     // Poko hops, looks around, then notices the rift and startles.
     f.poko.anim = {
       scrubs: [
@@ -208,8 +213,7 @@ const SCRIPT: Record<ChapterId, Writer> = {
       look: 1 - smoothstep(0.1, 0.16, t),
     };
     f.effects.rift = smoothstep(0.12, 0.28, t) * (1 - smoothstep(0.75, 1, t) * 0.7);
-    f.pokoSkinned = whole;
-    f.voxels = !whole;
+    f.pokoSkinned = false;
     // Matter comes apart: shiver, single pixels, clumps, then the whole body.
     const m = range(t, 0.24, 1);
     f.morph = {
@@ -526,8 +530,6 @@ const SCRIPT: Record<ChapterId, Writer> = {
       t: 1,
       idle: 0.012,
     };
-    f.pokoSkinned = true;
-    f.hideRigged = true;
     f.poko.anim = { scrubs: [scrub('Wave', t, 0.3, 0.75, 0.05, 0.05)], idle: 1, blink: true, look: 1 };
     f.env.floor = 1;
     f.env.skyTop = SKY.dawn[0].clone();
@@ -546,7 +548,7 @@ export function createFrame(): StoryFrame {
     morph: { ...DEFAULT_MORPH },
     stream: null,
     depth: 1,
-    pokoSkinned: true,
+    pokoSkinned: false,
     voxels: true,
     hideRigged: false,
     poko: { position: new THREE.Vector3(), yaw: 0, anim: idleAnim(), visible: true },
@@ -569,7 +571,7 @@ export function evaluateStory(u: number, f: StoryFrame = createFrame()): StoryFr
   f.morph = { ...DEFAULT_MORPH, from: 'poko', to: 'poko', t: 0 };
   f.stream = null;
   f.depth = 1;
-  f.pokoSkinned = true;
+  f.pokoSkinned = false;
   f.voxels = true;
   f.hideRigged = false;
   const beforeFinale = index < CHAPTERS.findIndex((c) => c.id === 'reconstruction');

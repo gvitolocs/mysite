@@ -165,11 +165,17 @@ then exactly character space, so animation keys are written in intuitive axes.
 |---|---|---|
 | Geometry | 2 116 exposed quads, 4 232 triangles | 4 096 cubes, 49 152 triangles |
 | Skinning | three.js `SkinnedMesh` | bone TRS uniforms in the compute shader |
-| Used when | Poko is whole and still (most of chapters 2 and 8) | awakening, disintegration, every morph |
+| Used when | not drawn by the story: its skeleton and clips drive the bones | every chapter: Poko is one voxel body from first frame to last |
 
 Both use the same bones, the same palette and shade, and the same bevel and
 seam shading, so the swap is invisible. Representation A costs about 1/10 of
 B's vertex work, which is why it is preferred whenever nothing is in flight.
+
+Swapping A in while Poko stood still used to show as a pop (two shaders,
+two silhouettes of the same character). The story now always draws B: the
+camera orbits the voxel Poko like a turntable and the same cubes then come
+apart, so there is no hand-over anywhere. A stays loaded for its rig and
+animation clips (`pokoSkinned` remains as a switch, set false throughout).
 
 ### 3.2 The pool and formations
 
