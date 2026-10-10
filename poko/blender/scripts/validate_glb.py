@@ -77,6 +77,12 @@ def main(path: Path) -> int:
     for i, p in enumerate(prims):
         missing = REQUIRED_ATTRIBUTES - set(p["attributes"])
         check(not missing, f"primitive {i} has {sorted(REQUIRED_ATTRIBUTES)}" + (f" (missing {sorted(missing)})" if missing else ""))
+        # The bevel/seam shader needs 0..1 UVs on every cube face. Quantised UVs
+        # (gltfpack without -vtf) are rescaled by KHR_texture_transform, which
+        # only exists on textures; Poko has none, so the scale would be lost.
+        uv = doc["accessors"][p["attributes"]["TEXCOORD_0"]] if "TEXCOORD_0" in p["attributes"] else None
+        if uv is not None:
+            check(uv["componentType"] == 5126, f"primitive {i} TEXCOORD_0 is float (keep -vtf in gltfpack)")
 
     vertices = sum(doc["accessors"][p["attributes"]["POSITION"]]["count"] for p in prims)
     check(vertices < 20000, f"{vertices} vertices (< 20000)")

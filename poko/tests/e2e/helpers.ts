@@ -24,6 +24,8 @@ declare global {
       samples(): number[];
       resetPerf(): void;
       dispose(): void;
+      /** The live Experience (debug only); just the fields tests read. */
+      experience: { time: number; rig: { bone(name: string): { quaternion: { w: number } } } };
     };
   }
 }

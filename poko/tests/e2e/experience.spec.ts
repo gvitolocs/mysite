@@ -176,4 +176,31 @@ test.describe('cinematic home page', () => {
     expect(end.geometries).toBeLessThanOrEqual(start.geometries + 1);
     expect(end.textures).toBeLessThanOrEqual(start.textures + 2);
   });
+
+  test('pointer look settles instead of tipping Poko over', async ({ page }) => {
+    // Regression: the look layer used to stack onto last frame's rotation
+    // whenever the animation mixer skipped an unchanged bone. At the end of the
+    // intro (look on, idle still off) a real pointer made Poko tip over:
+    // 19° → 44° → 69° → 94° in four seconds.
+    await openExperience(page);
+    await waitForCharacter(page);
+    await page.evaluate(() => window.__poko.setProgress(0.09));
+    await page.mouse.move(40, 40); // top-left corner, then hold still
+    const bodyTilt = () =>
+      page.evaluate(() => {
+        const q = window.__poko.experience.rig.bone('body').quaternion;
+        return (2 * Math.acos(Math.min(1, Math.abs(q.w))) * 180) / Math.PI;
+      });
+    // Wait in scene time: software WebGL renders only a few frames per second.
+    const waitScene = async (seconds: number) => {
+      const end = (await page.evaluate(() => window.__poko.experience.time)) + seconds;
+      await page.waitForFunction((t) => window.__poko.experience.time >= t, end, { timeout: 60_000 });
+    };
+    await waitScene(2.5);
+    const settled = await bodyTilt();
+    await waitScene(2.5);
+    const later = await bodyTilt();
+    expect(settled).toBeLessThan(35);
+    expect(Math.abs(later - settled)).toBeLessThan(2);
+  });
 });

@@ -135,14 +135,23 @@ then exactly character space, so animation keys are written in intuitive axes.
 * stages lights and a camera, renders previews with Cycles (`blender/renders`),
   saves `poko_genesis.blend` and exports `blender/exports/poko_raw.glb`.
 
-`npm run poko:pack` then runs **gltfpack** (`-cc -kn -km -kv`) and
-`validate_glb.py`. Two lessons the validator caught:
+`npm run poko:pack` then runs **gltfpack** (`-cc -kn -km -kv -vtf`) and
+`validate_glb.py`. Three lessons, all now checked by the validator:
 
 1. gltfpack drops `TEXCOORD_0` when no texture uses it. `-kv` keeps it, because
    our shader uses UVs procedurally.
 2. Quantisation folds vertex dequantisation into the **inverse bind matrices**.
    The runtime therefore never reuses the GLB's inverse binds for the voxel
    particles; it keeps its own, built in the voxel rest space (`PokoRig.ts`).
+3. gltfpack also quantises UVs and stores their rescale in
+   `KHR_texture_transform`, which lives on textures. Poko has none, so the
+   rescale was silently lost and UVs shrank to 0..0.0625. The bevel shader then
+   treated every pixel as a cube edge: normals tilted up-left, seams vanished,
+   and mesh A rendered flatter, brighter and more orange than voxels B, a
+   visible pop wherever the story swaps representations (the intro → Poko
+   boundary). `-vtf` keeps float UVs (+0.5 KB), and the validator fails on
+   non-float `TEXCOORD_0`. After the fix, A and B render the same frame to
+   within 0.1 of a unit of mean colour.
 
 633 KB raw → 94 KB with meshopt → about 18 KB gzipped on the wire.
 
@@ -385,6 +394,18 @@ so voxels leaned away from a phantom pointer and the result depended on frame
 history. Now the pointer layer is inert until real input
 (`idleTime = Infinity`), and forward and backward frames are pixel-identical in
 the browser.
+
+A second leak needed a real pointer to show. three.js's `PropertyMixer` writes
+a bone only when the mixed clip value *changed* since the last frame. While
+the clips hold still (end of the intro: look on, idle not yet), the bone kept
+last frame's look rotation and the look layer stacked another on top: Poko
+tipped over (19° → 44° → 69° → 94° in four seconds), and as the look faded out
+the decaying rotations summed to many times the look angle (at 60 fps about
+13×). `PokoAnimationController` now saves the clip pose of everything the look
+layer touches and restores it before the mixer runs, so the layer is
+additive on the clip pose, never on its own output. The e2e test "pointer look
+settles instead of tipping Poko over" holds a real pointer still and fails on
+the old code.
 
 ### 5.4 Keyboard, links, touch
 
