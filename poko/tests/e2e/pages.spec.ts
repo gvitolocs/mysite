@@ -3,7 +3,9 @@ import { expect, test } from '@playwright/test';
 const PAGES = [
   { path: '/work/', h1: 'Things I have built' },
   { path: '/work/pokoin/', h1: 'Pokoin' },
-  { path: '/work/cardrail/', h1: 'CardRail' },
+  { path: '/work/cardrails/', h1: 'CardRails' },
+  { path: '/work/prduct/', h1: 'prduct · DPP assessment pilot' },
+  { path: '/work/tmelnik/', h1: 'Tmelnik app' },
   { path: '/work/systems/', h1: 'Systems & data' },
   { path: '/about/', h1: 'Connecting software, data and the people who use it.' },
 ];

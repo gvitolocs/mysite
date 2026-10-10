@@ -72,7 +72,8 @@ describe('camera', () => {
   const pose = (u: number, aspect = 16 / 10): CameraPose => cameraTrack.evaluate(u, aspect, { position: new THREE.Vector3(), target: new THREE.Vector3(), fov: 0 });
 
   it('moves continuously: no jumps between neighbouring scroll positions', () => {
-    const n = 4000;
+    // 250 samples per viewport of scroll, so the bound means the same whatever the story's length.
+    const n = Math.round(TOTAL_LENGTH * 250);
     let prev = pose(0).position.clone();
     for (let i = 1; i <= n; i++) {
       const p = pose(i / n).position.clone();

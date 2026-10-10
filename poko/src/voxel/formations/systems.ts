@@ -1,5 +1,5 @@
 /**
- * World C: engineering systems. An abstract but faithful sketch of the Pokoin
+ * World E: engineering systems. An abstract but faithful sketch of the Pokoin
  * stack documented in the CV, top to bottom:
  *
  *   edge nodes (Cloudflare cache + request coalescing)

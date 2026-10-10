@@ -6,7 +6,7 @@ import { PokoMark } from '../../components/PokoMark.tsx';
 import { SiteFooter, SiteHeader } from '../../components/SiteChrome.tsx';
 import { withBase } from '../base.ts';
 
-const caseSlug: Record<string, string> = { pokoin: 'pokoin', cardrail: 'cardrail', 'price-pipelines': 'systems' };
+const caseSlug: Record<string, string> = { pokoin: 'pokoin', cardrail: 'cardrails', 'prduct-dpp': 'prduct', 'tmelnik-app': 'tmelnik', 'price-pipelines': 'systems' };
 
 function PageShell(props: { current: string; children: unknown }) {
   return (
@@ -25,7 +25,7 @@ export function WorkIndex() {
       <header class="page-hero">
         <p class="kicker">Work</p>
         <h1>Things I have built</h1>
-        <p class="lede">Backend services, data pipelines and the products on top of them. The three marked with a case study appear in the 3D journey on the home page.</p>
+        <p class="lede">Backend services, data pipelines and the products on top of them. The ones with a case study appear in the 3D journey on the home page.</p>
       </header>
       <ol class="work-list">
         <For each={projects}>

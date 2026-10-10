@@ -107,24 +107,31 @@ export const projects: Project[] = [
     links: [{ label: "Visit Pokoin", href: "https://pokoin.com" }], accent: "teal",
   },
   {
-    id: "cardrail", name: "CardRail", tagline: "In development",
+    id: "cardrail", name: "CardRails", tagline: "In development",
     outcome: "A scanning desk and stock book for collectible-card inventory.",
     description: "Connects phone capture, saved scan photos, card recognition and inventory positions. Work includes a Rust/PostgreSQL backend, React web app, Swift and Kotlin clients, and CardTrader and eBay integrations for listing and stock workflows.",
     stack: ["Rust", "PostgreSQL", "React", "Swift", "Kotlin", "REST APIs"],
     links: [
-      { label: "Open CardRail", href: "https://cardrails.vercel.app" },
+      { label: "Open CardRails", href: "https://cardrails.vercel.app" },
       { label: "Source code", href: "https://github.com/gvitolocs/CardRail" },
     ], accent: "violet",
   },
   {
-    id: "prduct-dpp", name: "prduct · DPP assessment", tagline: "Sprint prototype",
+    id: "prduct-dpp", name: "prduct · DPP assessment pilot", tagline: "Pilot · sprint prototype",
     outcome: "Making supplier and product-data gaps visible to B2B teams.",
-    description: "An interactive assessment website from my prduct internship. Purchasing and sales teams follow different questions through a product’s lifecycle, then receive a product-data landscape and practical next steps. Developed through stakeholder feedback for Digital Product Passport readiness.",
+    description: "An interactive Digital Product Passport readiness assessment from my prduct internship, piloted with furniture. Purchasing and sales teams each follow their own questions through a product’s lifecycle, one situation at a time, then receive a product-data landscape and practical next steps instead of a score. Developed through stakeholder feedback.",
     stack: ["JavaScript", "HTML/CSS", "Python", "B2B", "Product data"],
     links: [
       { label: "Try the prototype", href: "https://demosprint-fawn.vercel.app" },
       { label: "Source code", href: "https://github.com/gvitolocs/prduct_sprint" },
     ], accent: "teal",
+  },
+  {
+    id: "tmelnik-app", name: "Tmelnik app", tagline: "Mobile app",
+    outcome: "Project offers, applications and feedback for international youth exchanges in one app.",
+    description: "A Flutter and Firebase app for Tmelnik’s youth-exchange projects. Participants browse project offers, apply and give feedback, with information and news sections alongside; organizers and admins add and manage offers through role-based access. Google or email sign-in, offers shareable to Instagram, built for iOS, Android and the web.",
+    stack: ["Dart", "Flutter", "Firebase", "Cloud Firestore"],
+    links: [{ label: "Source code", href: "https://github.com/gvitolocs/TmelnikAPP" }], accent: "violet",
   },
   {
     id: "price-pipelines", name: "Catalog & price data pipelines", tagline: "Data engineering",

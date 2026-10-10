@@ -20,7 +20,7 @@ const homeDescription =
 
 export const ROUTES: Route[] = [
   { path: '/', page: 'home', title: `${site.name} · Software engineer`, description: homeDescription },
-  { path: '/work/', page: 'work', title: `Work · ${site.name}`, description: `Projects by ${site.name}: Pokoin, CardRail, data pipelines, a B2B product-data prototype and more.` },
+  { path: '/work/', page: 'work', title: `Work · ${site.name}`, description: `Projects by ${site.name}: Pokoin, CardRails, data pipelines, a B2B product-data prototype and more.` },
   ...CASE_STUDIES.map((c) => ({ path: `/work/${c.slug}/`, page: 'case' as const, slug: c.slug, title: `${c.title} · ${site.name}`, description: c.description })),
   { path: '/about/', page: 'about', title: `About · ${site.name}`, description: `About ${site.name}: experience, education, skills and how I work.` },
   { path: '/404', page: 'notfound', title: `Not found · ${site.name}`, description: 'This page does not exist.' },

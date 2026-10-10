@@ -170,6 +170,8 @@ html.static .overlay {
 /* Project worlds: text on the left third, the sculpture fills the rest. */
 .chapter--pokoin .overlay__title,
 .chapter--cardrail .overlay__title,
+.chapter--prduct .overlay__title,
+.chapter--tmelnik .overlay__title,
 .chapter--systems .overlay__title {
   font-size: clamp(2.4rem, 5vw, 4.4rem);
 }

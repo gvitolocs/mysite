@@ -2,12 +2,13 @@ import { Lock } from "lucide-solid";
 import { CardVaultDiagram } from "@/components/diagrams/CardVaultDiagram";
 import { HmiDiagram } from "@/components/diagrams/HmiDiagram";
 import { PipelineDiagram } from "@/components/diagrams/PipelineDiagram";
+import { TmelnikDiagram } from "@/components/diagrams/TmelnikDiagram";
 import type { Project } from "@/data/content";
 
 export type Shot = { src: string; srcset: string; width: number; height: number };
 export type Shots = Record<"pokoin" | "cardrail" | "prduct", Shot>;
 
-const diagrams = { pipeline: PipelineDiagram, cardvault: CardVaultDiagram, hmi: HmiDiagram };
+const diagrams = { pipeline: PipelineDiagram, cardvault: CardVaultDiagram, hmi: HmiDiagram, tmelnik: TmelnikDiagram };
 
 const frame = "relative -mx-6 -mt-6 mb-6 overflow-hidden rounded-t-2xl border-b border-white/[0.06] bg-background";
 

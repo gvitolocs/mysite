@@ -39,4 +39,4 @@ Pokoin home-feed measurements compare the direct Pi API baseline with the optimi
 
 Historical price imports comprise 52,940,443 English/Japanese Pokemon observations, 951 archives and 32 monthly PostgreSQL partitions. The September 30 snapshot contains 624,798 product/variant rows and 510,593 distinct products. Dataset rows are not sales or user counts.
 
-CardRail is marked as in development; the prduct DPP assessment is a sprint prototype. The prduct internship uses the year 2026 because precise months and the formal role title have not yet been confirmed.
+CardRails is marked as in development; the prduct DPP assessment is a sprint prototype. The prduct internship uses the year 2026 because precise months and the formal role title have not yet been confirmed.

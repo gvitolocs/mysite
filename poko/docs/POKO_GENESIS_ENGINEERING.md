@@ -175,7 +175,7 @@ B's vertex work, which is why it is preferred whenever nothing is in flight.
 
 There is one pool of `POOL_SIZE = 4096` voxels (64 × 64). A **formation** is an
 arrangement of the whole pool: Poko, the halo, the portal, the Pokoin card, the
-CardRail rack, the systems sculpture, the finale. Each is stored as one layer
+CardRails rack, the systems sculpture, the finale. Each is stored as one layer
 of two `DataArrayTexture`s:
 
 ```
@@ -298,11 +298,11 @@ before and after.
 copy) and the WebGL story (progress boundaries):
 
 ```
-awakening 2.0 · disintegration 2.4 · portal 2.0 · pokoin 2.2 · cardrail 2.0 · systems 2.0 · reconstruction 1.8 · finale 1.6   (viewport heights)
+awakening 2.0 · disintegration 2.4 · portal 2.0 · pokoin 2.2 · cardrail 2.0 · prduct 2.0 · tmelnik 2.0 · systems 2.0 · reconstruction 1.8 · finale 1.6   (viewport heights)
 ```
 
-The page is genuinely 16 viewports tall. Scroll progress `u = scrollY /
-(scrollHeight − innerHeight)`; chapter *i* starts at `top_i / (16 − 1)`. The
+The page is genuinely 20 viewports tall. Scroll progress `u = scrollY /
+(scrollHeight − innerHeight)`; chapter *i* starts at `top_i / (20 − 1)`. The
 story is authored per chapter in local time `t ∈ [0, 1]`, so changing a chapter
 length never breaks the script.
 
@@ -332,8 +332,14 @@ effects. Two unit tests protect the contract:
    flowing with progress. Then `stream → portal`: the voxels build twelve
    twisting square frames, nearest first, and the camera flies through. A pixel
    event horizon waits at the far end; crossing it flashes and warps the image.
-4. **Worlds.** `portal → pokoin → cardrail → systems`. Each flight has its own
-   delay axis, arc and a deliberately small swirl. A pivot far from the voxels
+4. **Worlds.** `portal → pokoin → cardrail → prduct → tmelnik → systems`. The
+   prduct pilot is a chair carrying a passport code, five rising stops (one
+   situation each) and the product-data landscape with its PILOT badge; the
+   Tmelnik app is a phone in the app's own theme colours with its four sections,
+   offers drifting off it and a pinned globe. Worlds alternate sides of the
+   path, so each flight's delay axis sweeps from the edge facing the next
+   world. Each flight has its own delay axis, arc and a deliberately small
+   swirl. A pivot far from the voxels
    multiplies the swing by the lever arm, which first sent cubes through the
    camera.
 5. **Reconstruction.** `systems → finale`. Delay is inverted surface depth

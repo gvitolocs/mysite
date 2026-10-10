@@ -5,7 +5,7 @@
  *
  *  Rift          the disturbance that startles Poko: a pulsing square vortex
  *  PortalHorizon the far end of the voxel tunnel: concentric square waves
- *  ScanBeam      CardRail's scanner: a sweeping band of light in the gate
+ *  ScanBeam      CardRails's scanner: a sweeping band of light in the gate
  */
 import * as THREE from 'three';
 
