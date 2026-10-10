@@ -1,0 +1,95 @@
+{
+  "label": "genesis-mobile",
+  "url": "http://127.0.0.1:4180/?debug",
+  "mobile": true,
+  "network": "none",
+  "date": "2026-10-09T20:55:46.929Z",
+  "environment": "headless Chromium 141 (Playwright 1.56.1), SwiftShader software WebGL, no GPU; loopback server",
+  "cold": {
+    "wallMs": 2275,
+    "fcp": 160,
+    "lcp": 160,
+    "domContentLoaded": 42.89999999944121,
+    "load": 45.5,
+    "longTasks": 2,
+    "blockingMs": 484,
+    "firstWebGLFrameMs": 688.3999999994412,
+    "requests": 11,
+    "rawBytes": 1004341,
+    "gzipBytes": 399723,
+    "wireBytes": 395771,
+    "gzipBytesByType": {
+      "Document": 11465,
+      "Font": 74308,
+      "Stylesheet": 3643,
+      "Image": 975,
+      "Script": 215556,
+      "Fetch": 93776
+    },
+    "scriptMs": 36,
+    "taskMs": 701,
+    "jsHeapUsedMB": 4.8
+  },
+  "story": {
+    "scrollDurationMs": 53308,
+    "frames": 422,
+    "avgFps": 7.7,
+    "frameP50": 116.7,
+    "frameP95": 266.6,
+    "frameP99": 333.4,
+    "frameMax": 1783.2,
+    "jankFrames": 68,
+    "cpuPerFrameP50": 0.7,
+    "cpuPerFrameP95": 2.6,
+    "wheelToFrameP50": 334.3,
+    "wheelToFrameP95": 652.1,
+    "quality": "low",
+    "drawCallsAtEnd": 9,
+    "trianglesAtEnd": 54348,
+    "gpuGeometries": 12,
+    "gpuTextures": 12,
+    "programs": 15,
+    "drawingBuffer": [
+      350,
+      713
+    ],
+    "timings": {
+      "formationsMs": 39.59999999962747,
+      "engineMs": 46.10000000055879,
+      "firstFrameMs": 451.09999999962747,
+      "characterMs": 52.30000000074506
+    },
+    "histogram": {
+      "<17": 66,
+      "17-33": 0,
+      "33-50": 9,
+      "50-100": 37,
+      ">100": 310
+    }
+  },
+  "warm": {
+    "wallMs": 2072,
+    "fcp": 56,
+    "lcp": 56,
+    "domContentLoaded": 37.200000000186265,
+    "load": 39.10000000055879,
+    "longTasks": 1,
+    "blockingMs": 341,
+    "firstWebGLFrameMs": 500.70000000018626,
+    "requests": 11,
+    "rawBytes": 1004341,
+    "gzipBytes": 399723,
+    "wireBytes": 1813,
+    "gzipBytesByType": {
+      "Document": 11465,
+      "Stylesheet": 3643,
+      "Image": 975,
+      "Font": 74308,
+      "Script": 215556,
+      "Fetch": 93776
+    },
+    "scriptMs": 31,
+    "taskMs": 528,
+    "jsHeapUsedMB": 4.8
+  }
+}

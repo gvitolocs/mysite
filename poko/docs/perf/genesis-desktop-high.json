@@ -1,0 +1,95 @@
+{
+  "label": "genesis-high",
+  "url": "http://127.0.0.1:4180/?debug&quality=high",
+  "mobile": false,
+  "network": "none",
+  "date": "2026-10-09T20:46:58.469Z",
+  "environment": "headless Chromium 141 (Playwright 1.56.1), SwiftShader software WebGL, no GPU; loopback server",
+  "cold": {
+    "wallMs": 2297,
+    "fcp": 148,
+    "lcp": 148,
+    "domContentLoaded": 41.39999999944121,
+    "load": 44,
+    "longTasks": 2,
+    "blockingMs": 517,
+    "firstWebGLFrameMs": 716.8999999994412,
+    "requests": 11,
+    "rawBytes": 1004341,
+    "gzipBytes": 399723,
+    "wireBytes": 395771,
+    "gzipBytesByType": {
+      "Document": 11465,
+      "Stylesheet": 3643,
+      "Image": 975,
+      "Font": 74308,
+      "Script": 215556,
+      "Fetch": 93776
+    },
+    "scriptMs": 37,
+    "taskMs": 758,
+    "jsHeapUsedMB": 4.7
+  },
+  "story": {
+    "scrollDurationMs": 270704,
+    "frames": 325,
+    "avgFps": 1.2,
+    "frameP50": 849.9,
+    "frameP95": 1100,
+    "frameP99": 1350,
+    "frameMax": 2833.3,
+    "jankFrames": 5,
+    "cpuPerFrameP50": 1,
+    "cpuPerFrameP95": 2.9,
+    "wheelToFrameP50": 2405.8,
+    "wheelToFrameP95": 3189.5,
+    "quality": "high",
+    "drawCallsAtEnd": 22,
+    "trianglesAtEnd": 107741,
+    "gpuGeometries": 12,
+    "gpuTextures": 22,
+    "programs": 20,
+    "drawingBuffer": [
+      1440,
+      900
+    ],
+    "timings": {
+      "formationsMs": 39.799999999813735,
+      "engineMs": 33.80000000074506,
+      "firstFrameMs": 497.80000000074506,
+      "characterMs": 64.5
+    },
+    "histogram": {
+      "<17": 3,
+      "17-33": 0,
+      "33-50": 1,
+      "50-100": 1,
+      ">100": 320
+    }
+  },
+  "warm": {
+    "wallMs": 2129,
+    "fcp": 60,
+    "lcp": 60,
+    "domContentLoaded": 38.40000000037253,
+    "load": 41.299999999813735,
+    "longTasks": 1,
+    "blockingMs": 402,
+    "firstWebGLFrameMs": 565.2999999998137,
+    "requests": 11,
+    "rawBytes": 1004341,
+    "gzipBytes": 399723,
+    "wireBytes": 1813,
+    "gzipBytesByType": {
+      "Document": 11465,
+      "Stylesheet": 3643,
+      "Font": 74308,
+      "Image": 975,
+      "Script": 215556,
+      "Fetch": 93776
+    },
+    "scriptMs": 32,
+    "taskMs": 600,
+    "jsHeapUsedMB": 4.7
+  }
+}

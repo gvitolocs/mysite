@@ -1,0 +1,95 @@
+{
+  "label": "genesis",
+  "url": "http://127.0.0.1:4180/?debug",
+  "mobile": false,
+  "network": "none",
+  "date": "2026-10-09T20:44:33.675Z",
+  "environment": "headless Chromium 141 (Playwright 1.56.1), SwiftShader software WebGL, no GPU; loopback server",
+  "cold": {
+    "wallMs": 2172,
+    "fcp": 128,
+    "lcp": 128,
+    "domContentLoaded": 35.299999999813735,
+    "load": 37.5,
+    "longTasks": 2,
+    "blockingMs": 396,
+    "firstWebGLFrameMs": 594.2000000001863,
+    "requests": 11,
+    "rawBytes": 1004341,
+    "gzipBytes": 399723,
+    "wireBytes": 395771,
+    "gzipBytesByType": {
+      "Document": 11465,
+      "Stylesheet": 3643,
+      "Font": 74308,
+      "Image": 975,
+      "Script": 215556,
+      "Fetch": 93776
+    },
+    "scriptMs": 32,
+    "taskMs": 617,
+    "jsHeapUsedMB": 4.7
+  },
+  "story": {
+    "scrollDurationMs": 134205,
+    "frames": 438,
+    "avgFps": 3.2,
+    "frameP50": 316.5,
+    "frameP95": 600,
+    "frameP99": 883.3,
+    "frameMax": 2100,
+    "jankFrames": 37,
+    "cpuPerFrameP50": 0.7,
+    "cpuPerFrameP95": 4.7,
+    "wheelToFrameP50": 999.2,
+    "wheelToFrameP95": 1618.7,
+    "quality": "low",
+    "drawCallsAtEnd": 9,
+    "trianglesAtEnd": 54348,
+    "gpuGeometries": 12,
+    "gpuTextures": 12,
+    "programs": 15,
+    "drawingBuffer": [
+      1224,
+      765
+    ],
+    "timings": {
+      "formationsMs": 38.19999999925494,
+      "engineMs": 40.200000000186265,
+      "firstFrameMs": 408.5,
+      "characterMs": 62.700000000186265
+    },
+    "histogram": {
+      "<17": 19,
+      "17-33": 0,
+      "33-50": 11,
+      "50-100": 25,
+      ">100": 383
+    }
+  },
+  "warm": {
+    "wallMs": 2036,
+    "fcp": 56,
+    "lcp": 56,
+    "domContentLoaded": 37.799999999813735,
+    "load": 40.5,
+    "longTasks": 1,
+    "blockingMs": 317,
+    "firstWebGLFrameMs": 475,
+    "requests": 11,
+    "rawBytes": 1004341,
+    "gzipBytes": 399723,
+    "wireBytes": 1813,
+    "gzipBytesByType": {
+      "Document": 11465,
+      "Stylesheet": 3643,
+      "Font": 74308,
+      "Image": 975,
+      "Script": 215556,
+      "Fetch": 93776
+    },
+    "scriptMs": 38,
+    "taskMs": 505,
+    "jsHeapUsedMB": 4.7
+  }
+}

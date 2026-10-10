@@ -1,0 +1,37 @@
+{
+  "u0000": {
+    "chapter": "awakening",
+    "calls": 5,
+    "triangles": 50114
+  },
+  "u0200": {
+    "chapter": "disintegration",
+    "calls": 7,
+    "triangles": 50118
+  },
+  "u0400": {
+    "chapter": "portal",
+    "calls": 7,
+    "triangles": 50118
+  },
+  "u0550": {
+    "chapter": "pokoin",
+    "calls": 6,
+    "triangles": 50116
+  },
+  "u0660": {
+    "chapter": "cardrail",
+    "calls": 7,
+    "triangles": 50118
+  },
+  "u0800": {
+    "chapter": "systems",
+    "calls": 6,
+    "triangles": 50116
+  },
+  "u1000": {
+    "chapter": "finale",
+    "calls": 9,
+    "triangles": 54348
+  }
+}
