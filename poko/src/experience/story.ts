@@ -44,8 +44,8 @@ const KEYS: CameraKey[] = [
   { chapter: 'awakening', at: 1, position: [3.0, 1.85, 7.3], target: [0, 1.25, 0], fov: 30 },
   // Disintegration: a slow turntable drift around the same voxel Poko (about
   // 20° in all), then he comes apart. Faster or wider swings read as spinning.
-  { chapter: 'disintegration', at: 0.22, position: [1.3, 1.7, 7.4], target: [0, 1.3, 0], fov: 30 },
-  { chapter: 'disintegration', at: 0.6, position: [-0.6, 2.4, 8.6], target: [0, 1.55, 0], fov: 34 },
+  { chapter: 'disintegration', at: 0.38, position: [1.3, 1.7, 7.4], target: [0, 1.3, 0], fov: 30 },
+  { chapter: 'disintegration', at: 0.7, position: [-0.6, 2.4, 8.6], target: [0, 1.55, 0], fov: 34 },
   { chapter: 'disintegration', at: 1, position: [1.8, 4.3, 9.6], target: [0, 1.7, -1], fov: 38 },
   // Portal: follow the stream, enter the tunnel.
   { chapter: 'portal', at: 0.32, position: [8.2, 4.4, 5.2], target: [0.5, 1.9, -8], fov: 40, ease: 'glide' },
@@ -200,21 +200,23 @@ const SCRIPT: Record<ChapterId, Writer> = {
   },
 
   disintegration(t, f) {
-    // Poko hops, looks around, then notices the rift and startles.
+    // Poko hops, looks around, then notices the rift and startles. Each beat
+    // gets about half a viewport of scroll: squeezed together they read as
+    // one blur between the intro and the break-up.
     f.poko.anim = {
       scrubs: [
-        scrub('Hop', t, 0.02, 0.12),
-        scrub('LookAround', t, 0.11, 0.19, 0.02, 0.015),
-        scrub('Surprise', t, 0.17, 0.25, 0.015, 0.6),
+        scrub('Hop', t, 0.04, 0.16),
+        scrub('LookAround', t, 0.18, 0.3, 0.03, 0.02),
+        scrub('Surprise', t, 0.31, 0.42, 0.02, 0.6),
       ],
-      idle: 1 - smoothstep(0.16, 0.2, t) * 0.6,
-      blink: t < 0.17,
-      look: 1 - smoothstep(0.1, 0.16, t),
+      idle: 1 - smoothstep(0.28, 0.34, t) * 0.6,
+      blink: t < 0.3,
+      look: 1 - smoothstep(0.14, 0.22, t),
     };
-    f.effects.rift = smoothstep(0.12, 0.28, t) * (1 - smoothstep(0.75, 1, t) * 0.7);
+    f.effects.rift = smoothstep(0.24, 0.44, t) * (1 - smoothstep(0.8, 1, t) * 0.7);
     f.pokoSkinned = false;
     // Matter comes apart: shiver, single pixels, clumps, then the whole body.
-    const m = range(t, 0.24, 1);
+    const m = range(t, 0.44, 1);
     f.morph = {
       ...DEFAULT_MORPH,
       from: 'poko',
@@ -239,7 +241,7 @@ const SCRIPT: Record<ChapterId, Writer> = {
       vibrate: 0.025,
       glow: 0.75,
     };
-    f.push = smoothstep(0.6, 0.9, t);
+    f.push = smoothstep(0.7, 0.92, t);
     f.env.exposure = 1;
     f.effects.bloom = 0.33 + bell(m) * 0.193;
   },
@@ -597,7 +599,7 @@ export function evaluateStory(u: number, f: StoryFrame = createFrame()): StoryFr
 /** Progress at which each chapter's "hero" state is fully formed (used by reduced motion). */
 export const REST_POINTS: Record<ChapterId, number> = {
   awakening: 1,
-  disintegration: 0.12,
+  disintegration: 0.17,
   portal: 0.8,
   pokoin: 0.7,
   cardrail: 0.7,
