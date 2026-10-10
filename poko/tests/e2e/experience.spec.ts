@@ -30,11 +30,11 @@ test.describe('cinematic home page', () => {
     await openExperience(page);
     for (const [u, chapter, label] of [
       [0.17, 'disintegration', 'Poko'],
-      [0.4, 'pokoin', 'Pokoin'],
-      [0.5, 'cardrail', 'CardRails'],
-      [0.61, 'prduct', 'prduct'],
-      [0.72, 'tmelnik', 'Tmelnik'],
-      [0.82, 'systems', 'Systems'],
+      [0.44, 'pokoin', 'Pokoin'],
+      [0.54, 'cardrail', 'CardRails'],
+      [0.64, 'prduct', 'prduct'],
+      [0.74, 'tmelnik', 'Tmelnik'],
+      [0.84, 'systems', 'Systems'],
       [1, 'finale', 'Contact'],
     ] as const) {
       await page.evaluate((v) => window.__poko.setProgress(v), u);
@@ -137,9 +137,9 @@ test.describe('cinematic home page', () => {
     await expect(page.locator('html')).toHaveClass(/reduced-motion/);
     await expect(page.getByRole('button', { name: 'Motion: reduced' })).toBeVisible();
     await page.evaluate(() => window.__poko.freeze(1));
-    await page.evaluate(() => window.__poko.setProgress(0.47));
+    await page.evaluate(() => window.__poko.setProgress(0.52));
     const a = await page.evaluate(() => window.__poko.voxelChecksum());
-    await page.evaluate(() => window.__poko.setProgress(0.55));
+    await page.evaluate(() => window.__poko.setProgress(0.58));
     const b = await page.evaluate(() => window.__poko.voxelChecksum());
     expect(b, 'within one chapter the scene holds still').toBe(a);
     await ctx.close();
@@ -186,7 +186,7 @@ test.describe('cinematic home page', () => {
     // 19° → 44° → 69° → 94° in four seconds.
     await openExperience(page);
     await waitForCharacter(page);
-    await page.evaluate(() => window.__poko.setProgress(0.076));
+    await page.evaluate(() => window.__poko.setProgress(0.068));
     await page.mouse.move(40, 40); // top-left corner, then hold still
     const bodyTilt = () =>
       page.evaluate(() => {

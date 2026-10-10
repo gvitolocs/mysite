@@ -60,8 +60,8 @@ export const CHAPTERS: Chapter[] = [
   {
     id: 'disintegration',
     nav: 'Poko',
-    length: 2.4,
-    overlay: [0.04, 0.5],
+    length: 4.0,
+    overlay: [0.03, 0.42],
     kicker: 'Meet Poko',
     body: `Pokoin's mascot, rebuilt from a 26 × 24 sprite into ${POKO_VOXEL_COUNT.toLocaleString('en-US')} voxels. Every one of them is about to move.`,
   },

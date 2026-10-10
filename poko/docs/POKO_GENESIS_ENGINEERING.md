@@ -304,11 +304,11 @@ before and after.
 copy) and the WebGL story (progress boundaries):
 
 ```
-awakening 2.0 · disintegration 2.4 · portal 2.0 · pokoin 2.2 · cardrail 2.0 · prduct 2.0 · tmelnik 2.0 · systems 2.0 · reconstruction 1.8 · finale 1.6   (viewport heights)
+awakening 2.0 · disintegration 4.0 · portal 2.0 · pokoin 2.2 · cardrail 2.0 · prduct 2.0 · tmelnik 2.0 · systems 2.0 · reconstruction 1.8 · finale 1.6   (viewport heights)
 ```
 
-The page is genuinely 20 viewports tall. Scroll progress `u = scrollY /
-(scrollHeight − innerHeight)`; chapter *i* starts at `top_i / (20 − 1)`. The
+The page is genuinely 21.6 viewports tall. Scroll progress `u = scrollY /
+(scrollHeight − innerHeight)`; chapter *i* starts at `top_i / (21.6 − 1)`. The
 story is authored per chapter in local time `t ∈ [0, 1]`, so changing a chapter
 length never breaks the script.
 
