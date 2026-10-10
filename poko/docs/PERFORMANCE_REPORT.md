@@ -113,7 +113,7 @@ about 250 MB of multisample buffers.
   doing all per-voxel work in one GPU compute pass and keeping the DOM off the
   frame loop.
 * **The character asset.** 633 KB → 94 KB (meshopt + quantisation, `-kv` to
-  keep UVs).
+  keep UVs, `-vtf` to keep them unquantised: +0.5 KB).
 
 ### What regressed or is unknown
 

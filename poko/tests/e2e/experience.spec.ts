@@ -29,10 +29,12 @@ test.describe('cinematic home page', () => {
   test('scroll drives the story and the chapter index', async ({ page }) => {
     await openExperience(page);
     for (const [u, chapter, label] of [
-      [0.2, 'disintegration', 'Poko'],
-      [0.5, 'pokoin', 'Pokoin'],
-      [0.65, 'cardrail', 'CardRail'],
-      [0.78, 'systems', 'Systems'],
+      [0.17, 'disintegration', 'Poko'],
+      [0.4, 'pokoin', 'Pokoin'],
+      [0.5, 'cardrail', 'CardRails'],
+      [0.61, 'prduct', 'prduct'],
+      [0.72, 'tmelnik', 'Tmelnik'],
+      [0.82, 'systems', 'Systems'],
       [1, 'finale', 'Contact'],
     ] as const) {
       await page.evaluate((v) => window.__poko.setProgress(v), u);
@@ -45,7 +47,7 @@ test.describe('cinematic home page', () => {
     await openExperience(page);
     await waitForCharacter(page);
     await page.evaluate(() => window.__poko.freeze(2));
-    const probes = [0.18, 0.24, 0.37, 0.47, 0.61, 0.75, 0.88];
+    const probes = [0.18, 0.24, 0.37, 0.47, 0.57, 0.68, 0.79, 0.92];
     const forward: Record<number, number | null> = {};
     for (const u of probes) {
       await page.evaluate((v) => window.__poko.setProgress(v), u);
@@ -64,11 +66,11 @@ test.describe('cinematic home page', () => {
     await waitForCharacter(page);
     await page.evaluate(() => window.__poko.freeze(2));
     const shots: Record<string, string> = {};
-    for (const u of [0.3, 0.55, 0.8]) {
+    for (const u of [0.3, 0.6, 0.85]) {
       await page.evaluate((v) => window.__poko.setProgress(v), u);
       shots[u] = await canvasPixels(page);
     }
-    for (const u of [0.8, 0.55, 0.3]) {
+    for (const u of [0.85, 0.6, 0.3]) {
       await page.evaluate((v) => window.__poko.setProgress(v), u);
       expect(await canvasPixels(page), `u=${u}`).toBe(shots[u]);
     }
@@ -100,10 +102,10 @@ test.describe('cinematic home page', () => {
     await page.goto('/');
     const hrefs = await page.locator('main a').evaluateAll((as) => as.map((a) => (a as HTMLAnchorElement).getAttribute('href')));
     expect(hrefs).toEqual(expect.arrayContaining([
-      '/work/pokoin/', 'https://pokoin.com', '/work/cardrail/', 'https://cardrails.vercel.app', '/work/systems/',
+      '/work/pokoin/', 'https://pokoin.com', '/work/cardrails/', 'https://cardrails.vercel.app', '/work/prduct/', '/work/tmelnik/', '/work/systems/',
       'mailto:gvitolocs@gmail.com', 'https://github.com/gvitolocs', 'https://www.linkedin.com/in/gvitolocs/', '/cv.pdf', '/about/', '/work/',
     ]));
-    for (const path of ['/work/pokoin/', '/work/cardrail/', '/work/systems/', '/about/', '/work/', '/cv.pdf']) {
+    for (const path of ['/work/pokoin/', '/work/cardrails/', '/work/prduct/', '/work/tmelnik/', '/work/systems/', '/about/', '/work/', '/cv.pdf']) {
       const res = await page.request.get(path);
       expect(res.status(), path).toBe(200);
     }
@@ -135,9 +137,9 @@ test.describe('cinematic home page', () => {
     await expect(page.locator('html')).toHaveClass(/reduced-motion/);
     await expect(page.getByRole('button', { name: 'Motion: reduced' })).toBeVisible();
     await page.evaluate(() => window.__poko.freeze(1));
-    await page.evaluate(() => window.__poko.setProgress(0.45));
+    await page.evaluate(() => window.__poko.setProgress(0.47));
     const a = await page.evaluate(() => window.__poko.voxelChecksum());
-    await page.evaluate(() => window.__poko.setProgress(0.52));
+    await page.evaluate(() => window.__poko.setProgress(0.55));
     const b = await page.evaluate(() => window.__poko.voxelChecksum());
     expect(b, 'within one chapter the scene holds still').toBe(a);
     await ctx.close();
@@ -175,5 +177,32 @@ test.describe('cinematic home page', () => {
     const end = await page.evaluate(() => window.__poko.info().memory);
     expect(end.geometries).toBeLessThanOrEqual(start.geometries + 1);
     expect(end.textures).toBeLessThanOrEqual(start.textures + 2);
+  });
+
+  test('pointer look settles instead of tipping Poko over', async ({ page }) => {
+    // Regression: the look layer used to stack onto last frame's rotation
+    // whenever the animation mixer skipped an unchanged bone. At the end of the
+    // intro (look on, idle still off) a real pointer made Poko tip over:
+    // 19° → 44° → 69° → 94° in four seconds.
+    await openExperience(page);
+    await waitForCharacter(page);
+    await page.evaluate(() => window.__poko.setProgress(0.076));
+    await page.mouse.move(40, 40); // top-left corner, then hold still
+    const bodyTilt = () =>
+      page.evaluate(() => {
+        const q = window.__poko.experience.rig.bone('body').quaternion;
+        return (2 * Math.acos(Math.min(1, Math.abs(q.w))) * 180) / Math.PI;
+      });
+    // Wait in scene time: software WebGL renders only a few frames per second.
+    const waitScene = async (seconds: number) => {
+      const end = (await page.evaluate(() => window.__poko.experience.time)) + seconds;
+      await page.waitForFunction((t) => window.__poko.experience.time >= t, end, { timeout: 60_000 });
+    };
+    await waitScene(2.5);
+    const settled = await bodyTilt();
+    await waitScene(2.5);
+    const later = await bodyTilt();
+    expect(settled).toBeLessThan(35);
+    expect(Math.abs(later - settled)).toBeLessThan(2);
   });
 });

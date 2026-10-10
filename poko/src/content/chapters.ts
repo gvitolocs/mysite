@@ -14,6 +14,8 @@ export type ChapterId =
   | 'portal'
   | 'pokoin'
   | 'cardrail'
+  | 'prduct'
+  | 'tmelnik'
   | 'systems'
   | 'reconstruction'
   | 'finale';
@@ -40,6 +42,8 @@ export interface Chapter {
 
 const pokoin = projects.find((p) => p.id === 'pokoin')!;
 const cardrail = projects.find((p) => p.id === 'cardrail')!;
+const prduct = projects.find((p) => p.id === 'prduct-dpp')!;
+const tmelnik = projects.find((p) => p.id === 'tmelnik-app')!;
 
 export const POKO_VOXEL_COUNT = 2586;
 
@@ -67,7 +71,7 @@ export const CHAPTERS: Chapter[] = [
     length: 2.0,
     overlay: [0.18, 0.62],
     kicker: 'Selected work',
-    body: 'Three things I have built, assembled from the same matter.',
+    body: 'What I have built, assembled from the same matter.',
   },
   {
     id: 'pokoin',
@@ -84,15 +88,41 @@ export const CHAPTERS: Chapter[] = [
   },
   {
     id: 'cardrail',
-    nav: 'CardRail',
+    nav: 'CardRails',
     length: 2.0,
     overlay: [0.42, 0.96],
     kicker: cardrail.tagline,
-    title: 'CardRail',
+    title: 'CardRails',
     body: 'A scanning desk and stock book for card sellers: scan a card, give it a shelf, list it on every marketplace.',
     links: [
-      { label: 'Case study', href: '/work/cardrail/' },
-      { label: 'Open CardRail', href: 'https://cardrails.vercel.app', external: true },
+      { label: 'Case study', href: '/work/cardrails/' },
+      { label: 'Open CardRails', href: 'https://cardrails.vercel.app', external: true },
+    ],
+  },
+  {
+    id: 'prduct',
+    nav: 'prduct',
+    length: 2.0,
+    overlay: [0.42, 0.96],
+    kicker: 'B2B internship · pilot',
+    title: 'prduct · DPP assessment pilot',
+    body: 'A Digital Product Passport readiness journey, piloted with furniture: purchasing and sales teams answer one situation at a time and get a product-data landscape, not a score.',
+    links: [
+      { label: 'Case study', href: '/work/prduct/' },
+      { label: 'Try the pilot', href: prduct.links[0].href, external: true },
+    ],
+  },
+  {
+    id: 'tmelnik',
+    nav: 'Tmelnik',
+    length: 2.0,
+    overlay: [0.42, 0.96],
+    kicker: tmelnik.tagline,
+    title: 'Tmelnik app',
+    body: 'A Flutter and Firebase app for international youth exchanges: project offers, applications, feedback and news, with sign-in and admin roles.',
+    links: [
+      { label: 'Case study', href: '/work/tmelnik/' },
+      { label: 'Source code', href: tmelnik.links[0].href, external: true },
     ],
   },
   {

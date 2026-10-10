@@ -1,5 +1,5 @@
 /**
- * World B: CardRail, "one inventory, every marketplace".
+ * World B: CardRails, "one inventory, every marketplace".
  *
  * Left to right: a scanner gate with a card mid-scan, a conveyor, and a stock
  * rack whose slots hold cards at named shelf positions. The workflow the
@@ -27,13 +27,13 @@ const CARD_COLORS: RGB[] = [
   hexToSrgbBytes('#ff8a65'),
 ];
 
-export interface CardRailFormation {
+export interface CardRailsFormation {
   targets: FormationTargets;
   /** Scanner gate opening in formation space (world units), for the scan beam. */
   gate: { center: [number, number, number]; width: number; height: number };
 }
 
-export function buildCardRail(): CardRailFormation {
+export function buildCardRails(): CardRailsFormation {
   const b = new TargetBuilder('cardrail', VOXEL_SIZE);
 
   // Scanner gate: two posts and a lintel, cyan-lit on the inside edges.

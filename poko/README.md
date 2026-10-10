@@ -2,9 +2,9 @@
 
 A cinematic, scroll-driven portfolio. Poko, the pixel-art coin mascot of
 [Pokoin](https://pokoin.com), wakes up as a voxel sculpture, comes apart into
-4 096 GPU-animated cubes, builds a portal, then a Pokoin card, a CardRail
-scanning rack and a systems diagram, and finally reassembles under the name it
-spells in voxels. Every frame is a pure function of the scroll position, so the
+4 096 GPU-animated cubes, builds a portal, then a Pokoin card, a CardRails
+scanning rack, the prduct DPP assessment pilot, the Tmelnik app and a systems
+diagram, and finally reassembles under the name it spells in voxels. Every frame is a pure function of the scroll position, so the
 whole journey plays backward exactly.
 
 Live at https://gvitolo.vercel.app/poko/ (a sub-path of the main portfolio; see `docs/DEPLOYMENT.md`).

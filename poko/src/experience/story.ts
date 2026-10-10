@@ -27,9 +27,11 @@ export const ANCHORS = {
   portal: new THREE.Vector3(0, 1.9, -16),
   pokoin: new THREE.Vector3(0, 2.55, -44),
   cardrail: new THREE.Vector3(7, 0.15, -60),
-  systems: new THREE.Vector3(0, 0.25, -76),
-  finale: new THREE.Vector3(0, 0, -94),
-  name: new THREE.Vector3(0, 3.75, -97),
+  prduct: new THREE.Vector3(-6.5, 0.15, -76),
+  tmelnik: new THREE.Vector3(5.5, 0.15, -92),
+  systems: new THREE.Vector3(0, 0.25, -108),
+  finale: new THREE.Vector3(0, 0, -126),
+  name: new THREE.Vector3(0, 3.75, -129),
 } as const;
 
 const POKO_CENTER_Y = 1.45;
@@ -40,8 +42,10 @@ const KEYS: CameraKey[] = [
   { chapter: 'awakening', at: 0, position: [0, 0.8, 9.6], target: [0, 0.6, 0], fov: 21, portrait: { position: [0, 1.1, 9.6], target: [0, 0.55, 0] } },
   { chapter: 'awakening', at: 0.55, position: [1.4, 1.3, 8.6], target: [0, 1.0, 0], fov: 26 },
   { chapter: 'awakening', at: 1, position: [3.0, 1.85, 7.3], target: [0, 1.25, 0], fov: 30 },
-  // Disintegration
-  { chapter: 'disintegration', at: 0.22, position: [2.2, 1.55, 6.3], target: [0, 1.3, 0], fov: 30 },
+  // Disintegration: keep orbiting the same voxel Poko like a turntable in
+  // Blender (right → front → left, radius ~7.5), then he comes apart.
+  { chapter: 'disintegration', at: 0.1, position: [0, 1.85, 7.6], target: [0, 1.3, 0], fov: 30 },
+  { chapter: 'disintegration', at: 0.22, position: [-3.2, 1.75, 6.9], target: [0, 1.3, 0], fov: 30 },
   { chapter: 'disintegration', at: 0.6, position: [-1.4, 2.5, 8.8], target: [0, 1.55, 0], fov: 34 },
   { chapter: 'disintegration', at: 1, position: [1.8, 4.3, 9.6], target: [0, 1.7, -1], fov: 38 },
   // Portal: follow the stream, enter the tunnel.
@@ -52,19 +56,27 @@ const KEYS: CameraKey[] = [
   { chapter: 'pokoin', at: 0.12, position: [0, 2.1, -30.5], target: [0, 2.4, -44], fov: 46, ease: 'out' },
   { chapter: 'pokoin', at: 0.45, position: [-0.6, 2.6, -34.2], target: [-1.5, 2.5, -44], fov: 37 },
   { chapter: 'pokoin', at: 0.86, position: [1.2, 2.7, -35.0], target: [-1.3, 2.5, -44], fov: 36, ease: 'in' },
-  // Flight to World B, tracked along the path, then the CardRail hero shots.
+  // Flight to World B, tracked along the path, then the CardRails hero shots.
   { chapter: 'cardrail', at: 0.22, position: [6.6, 3.6, -40.8], target: [4.6, 1.8, -52], fov: 40, ease: 'out' },
   { chapter: 'cardrail', at: 0.5, position: [2.6, 2.6, -50.2], target: [5.2, 1.4, -60], fov: 42 },
   { chapter: 'cardrail', at: 0.88, position: [6.8, 2.3, -50.8], target: [5.2, 1.5, -60], fov: 41, ease: 'in' },
-  // Flight to World C: systems
-  { chapter: 'systems', at: 0.22, position: [9.6, 3.9, -58.5], target: [3.5, 2.0, -69], fov: 40, ease: 'out' },
-  { chapter: 'systems', at: 0.5, position: [-3.4, 4.7, -67.4], target: [0, 2.2, -76], fov: 38 },
-  { chapter: 'systems', at: 0.88, position: [2.9, 3.7, -68.4], target: [0, 2.0, -76], fov: 36, ease: 'in' },
+  // Flight to World C: the prduct pilot, off to the left of the path.
+  { chapter: 'prduct', at: 0.22, position: [2.2, 3.8, -61.5], target: [-4.2, 1.8, -70], fov: 40, ease: 'out' },
+  { chapter: 'prduct', at: 0.5, position: [-1.2, 2.6, -67.8], target: [-8.4, 1.8, -76], fov: 40 },
+  { chapter: 'prduct', at: 0.88, position: [-6.0, 2.8, -65.4], target: [-7.0, 1.8, -76], fov: 44, ease: 'in' },
+  // Flight to World D: the Tmelnik app, back to the right.
+  { chapter: 'tmelnik', at: 0.22, position: [-4.0, 4.0, -77.5], target: [2.6, 2.0, -86], fov: 40, ease: 'out' },
+  { chapter: 'tmelnik', at: 0.5, position: [3.6, 2.7, -84.2], target: [4.4, 2.4, -92], fov: 40 },
+  { chapter: 'tmelnik', at: 0.88, position: [8.4, 2.9, -84.6], target: [4.8, 2.4, -92], fov: 40, ease: 'in' },
+  // Flight to World E: systems
+  { chapter: 'systems', at: 0.22, position: [8.6, 3.9, -90.5], target: [3.5, 2.0, -101], fov: 40, ease: 'out' },
+  { chapter: 'systems', at: 0.5, position: [-3.4, 4.7, -99.4], target: [0, 2.2, -108], fov: 38 },
+  { chapter: 'systems', at: 0.88, position: [2.9, 3.7, -100.4], target: [0, 2.0, -108], fov: 36, ease: 'in' },
   // Return: track the fragments home, then frame Poko under his name.
-  { chapter: 'reconstruction', at: 0.25, position: [3.4, 4.3, -74.5], target: [0, 1.7, -86], fov: 40, ease: 'out' },
-  { chapter: 'reconstruction', at: 0.65, position: [-2.6, 2.5, -85.4], target: [0, 1.7, -94], fov: 36 },
-  { chapter: 'reconstruction', at: 1, position: [0, 1.75, -83.4], target: [0, 1.5, -94], fov: 40 },
-  { chapter: 'finale', at: 1, position: [0.3, 1.8, -83.2], target: [0, 1.45, -94], fov: 40 },
+  { chapter: 'reconstruction', at: 0.25, position: [3.4, 4.3, -106.5], target: [0, 1.7, -118], fov: 40, ease: 'out' },
+  { chapter: 'reconstruction', at: 0.65, position: [-2.6, 2.5, -117.4], target: [0, 1.7, -126], fov: 36 },
+  { chapter: 'reconstruction', at: 1, position: [0, 1.75, -115.4], target: [0, 1.5, -126], fov: 40 },
+  { chapter: 'finale', at: 1, position: [0.3, 1.8, -115.2], target: [0, 1.45, -126], fov: 40 },
 ];
 
 export const cameraTrack = new CameraTrack(KEYS);
@@ -79,7 +91,7 @@ export interface StoryEffects {
   flash: number;
   /** Chromatic aberration / radial distortion, 0..1. */
   warp: number;
-  /** Scanner beam in the CardRail world, 0..1. */
+  /** Scanner beam in the CardRails world, 0..1. */
   scan: number;
   bloom: number;
   vignette: number;
@@ -94,7 +106,11 @@ export interface StoryFrame {
   stream: StreamParams | null;
   /** Awakening: 0 = flat pixel art, 1 = full volume. */
   depth: number;
-  /** Which representation draws Poko when he is whole. */
+  /**
+   * Draw Poko with the skinned GLB mesh instead of the voxel pool. The story
+   * keeps it false: Poko is the same voxels from the first frame to the last,
+   * so nothing is ever swapped. (The GLB still drives the bones.)
+   */
   pokoSkinned: boolean;
   /** Draw the voxel pool at all. */
   voxels: boolean;
@@ -133,6 +149,8 @@ const SKY = {
   portal: [col(0x010208), col(0x061226)],
   pokoin: [col(0x03030a), col(0x171127)],
   cardrail: [col(0x02050a), col(0x0a1d24)],
+  prduct: [col(0x04030c), col(0x18102e)],
+  tmelnik: [col(0x02040c), col(0x0a1a3a)],
   systems: [col(0x02030b), col(0x0d1030)],
   dawn: [col(0x03040c), col(0x1a1630)],
 } as const;
@@ -183,7 +201,6 @@ const SCRIPT: Record<ChapterId, Writer> = {
   },
 
   disintegration(t, f) {
-    const whole = t < 0.24;
     // Poko hops, looks around, then notices the rift and startles.
     f.poko.anim = {
       scrubs: [
@@ -196,8 +213,7 @@ const SCRIPT: Record<ChapterId, Writer> = {
       look: 1 - smoothstep(0.1, 0.16, t),
     };
     f.effects.rift = smoothstep(0.12, 0.28, t) * (1 - smoothstep(0.75, 1, t) * 0.7);
-    f.pokoSkinned = whole;
-    f.voxels = !whole;
+    f.pokoSkinned = false;
     // Matter comes apart: shiver, single pixels, clumps, then the whole body.
     const m = range(t, 0.24, 1);
     f.morph = {
@@ -360,25 +376,93 @@ const SCRIPT: Record<ChapterId, Writer> = {
     f.effects.bloom = 0.44;
   },
 
-  systems(t, f) {
+  prduct(t, f) {
     f.pokoSkinned = false;
     f.poko.visible = false;
     const m = range(t, 0, 0.45);
     f.morph = {
       ...DEFAULT_MORPH,
       from: 'cardrail',
-      to: 'systems',
+      to: 'prduct',
       fromPlacement: place(ANCHORS.cardrail, quatY(-0.32)),
+      toPlacement: place(ANCHORS.prduct, quatY(0.3)),
+      t: m,
+      spread: 0.6,
+      // CardRails sits to the right; its left edge leaves first, towards prduct.
+      delayAxis: [1 / 7.4, 0, 0, -3.3 / 7.4],
+      delayWeights: { axis: 0.6, depth: 0, seed: 0.6 },
+      center: tup(ANCHORS.prduct),
+      arc: [0, 1.4, 0],
+      swirlAxis: [0, 1, 0],
+      swirlAngle: -0.35,
+      swirlCenter: [0.5, 1.4, -68],
+      noiseAmp: 0.4,
+      noiseFreq: 0.5,
+      spin: 3.5,
+      transitScale: 0.85,
+      glow: 0.45,
+    };
+    f.env.floor = 0.55;
+    const [top, hor] = sky(SKY.cardrail, SKY.prduct, smoothstep(0.1, 0.5, t));
+    f.env.skyTop = top; f.env.skyHorizon = hor;
+    f.env.stage.copy(ANCHORS.prduct).setY(0);
+    f.env.accent = 0.7;
+    f.effects.bloom = 0.44;
+  },
+
+  tmelnik(t, f) {
+    f.pokoSkinned = false;
+    f.poko.visible = false;
+    const m = range(t, 0, 0.45);
+    f.morph = {
+      ...DEFAULT_MORPH,
+      from: 'prduct',
+      to: 'tmelnik',
+      fromPlacement: place(ANCHORS.prduct, quatY(0.3)),
+      toPlacement: place(ANCHORS.tmelnik, quatY(-0.3 + 0.12 * smoothstep(0.45, 1, t))),
+      t: m,
+      spread: 0.6,
+      // prduct sits to the left; its right edge leaves first, towards Tmelnik.
+      delayAxis: [-1 / 6.3, 0, 0, -2.9 / 6.3],
+      delayWeights: { axis: 0.6, depth: 0, seed: 0.6 },
+      center: tup(ANCHORS.tmelnik),
+      arc: [0, 1.5, 0],
+      swirlAxis: [0, 1, 0],
+      swirlAngle: 0.35,
+      swirlCenter: [-0.5, 1.4, -84],
+      noiseAmp: 0.4,
+      noiseFreq: 0.5,
+      spin: 3.5,
+      transitScale: 0.85,
+      glow: 0.45,
+    };
+    f.env.floor = 0.55;
+    const [top, hor] = sky(SKY.prduct, SKY.tmelnik, smoothstep(0.1, 0.5, t));
+    f.env.skyTop = top; f.env.skyHorizon = hor;
+    f.env.stage.copy(ANCHORS.tmelnik).setY(0);
+    f.env.accent = 0.75;
+    f.effects.bloom = 0.44;
+  },
+
+  systems(t, f) {
+    f.pokoSkinned = false;
+    f.poko.visible = false;
+    const m = range(t, 0, 0.45);
+    f.morph = {
+      ...DEFAULT_MORPH,
+      from: 'tmelnik',
+      to: 'systems',
+      fromPlacement: place(ANCHORS.tmelnik, quatY(-0.18)),
       toPlacement: place(ANCHORS.systems, quatY(0.1 + 0.25 * smoothstep(0.45, 1, t))),
       t: m,
       spread: 0.65,
-      delayAxis: [0, 1 / 4, 0, 0],
+      delayAxis: [0, 1 / 4.5, 0, 0],
       delayWeights: { axis: 0.8, depth: 0, seed: 0.5 },
       center: tup(ANCHORS.systems),
       arc: [0, 1.6, 0],
       swirlAxis: [0, 1, 0],
       swirlAngle: -0.35,
-      swirlCenter: [3.5, 1.2, -68],
+      swirlCenter: [3.0, 1.2, -100],
       noiseAmp: 0.45,
       noiseFreq: 0.5,
       spin: 3.5,
@@ -386,7 +470,7 @@ const SCRIPT: Record<ChapterId, Writer> = {
       glow: 0.45,
     };
     f.env.floor = 0.55;
-    const [top, hor] = sky(SKY.cardrail, SKY.systems, smoothstep(0.1, 0.5, t));
+    const [top, hor] = sky(SKY.tmelnik, SKY.systems, smoothstep(0.1, 0.5, t));
     f.env.skyTop = top; f.env.skyHorizon = hor;
     f.env.stage.copy(ANCHORS.systems).setY(0);
     f.env.accent = 0.9;
@@ -446,8 +530,6 @@ const SCRIPT: Record<ChapterId, Writer> = {
       t: 1,
       idle: 0.012,
     };
-    f.pokoSkinned = true;
-    f.hideRigged = true;
     f.poko.anim = { scrubs: [scrub('Wave', t, 0.3, 0.75, 0.05, 0.05)], idle: 1, blink: true, look: 1 };
     f.env.floor = 1;
     f.env.skyTop = SKY.dawn[0].clone();
@@ -466,7 +548,7 @@ export function createFrame(): StoryFrame {
     morph: { ...DEFAULT_MORPH },
     stream: null,
     depth: 1,
-    pokoSkinned: true,
+    pokoSkinned: false,
     voxels: true,
     hideRigged: false,
     poko: { position: new THREE.Vector3(), yaw: 0, anim: idleAnim(), visible: true },
@@ -489,7 +571,7 @@ export function evaluateStory(u: number, f: StoryFrame = createFrame()): StoryFr
   f.morph = { ...DEFAULT_MORPH, from: 'poko', to: 'poko', t: 0 };
   f.stream = null;
   f.depth = 1;
-  f.pokoSkinned = true;
+  f.pokoSkinned = false;
   f.voxels = true;
   f.hideRigged = false;
   const beforeFinale = index < CHAPTERS.findIndex((c) => c.id === 'reconstruction');
@@ -518,6 +600,8 @@ export const REST_POINTS: Record<ChapterId, number> = {
   portal: 0.8,
   pokoin: 0.7,
   cardrail: 0.7,
+  prduct: 0.7,
+  tmelnik: 0.7,
   systems: 0.7,
   reconstruction: 1,
   finale: 0.9,

@@ -17,7 +17,7 @@
     "poko:blender": "python blender/scripts/build_poko.py && npm run poko:pack",
     "cv:sync": "node scripts/sync-cv.mjs",
     "perf": "node scripts/perf/measure.mjs",
-    "poko:pack": "gltfpack -i blender/exports/poko_raw.glb -o src/assets/poko/poko.glb -cc -kn -km -kv && python blender/scripts/validate_glb.py src/assets/poko/poko.glb",
+    "poko:pack": "gltfpack -i blender/exports/poko_raw.glb -o src/assets/poko/poko.glb -cc -kn -km -kv -vtf && python blender/scripts/validate_glb.py src/assets/poko/poko.glb",
     "poko:svg": "node scripts/build-poko-svg.ts"
   },
   "dependencies": {

@@ -12,6 +12,14 @@
  *
  * The mixer is updated with dt = 0 after setting each action's time explicitly:
  * clip playback never advances on its own.
+ *
+ * Layer 3 must never read back its own output. three.js's PropertyMixer only
+ * writes a bone when the mixed clip value changed since the previous frame, so
+ * while the clips hold still (e.g. the end of the intro: look on, idle not yet)
+ * the bone keeps last frame's look rotation and stacking another one on top
+ * compounds every frame: Poko tips over and his eyes drift away. So the clip pose
+ * of every property layer 3 touches is saved before it is applied and put back
+ * before the mixer runs again.
  */
 import * as THREE from 'three';
 import { hash1 } from '../math/random.ts';
@@ -54,6 +62,11 @@ export class PokoAnimationController {
   private boop = 0;
 
   private readonly eyeRest: THREE.Vector3[];
+  /** Clip pose (layers 1 + 2) of the properties layer 3 modifies, from the last frame. */
+  private readonly clipBodyQuat = new THREE.Quaternion();
+  private clipBodyScaleY = 1;
+  private readonly clipEyePos = [new THREE.Vector3(), new THREE.Vector3()];
+  private clipPoseSaved = false;
 
   constructor(private readonly rig: PokoRig) {
     this.eyeRest = [rig.bone('eye_l').position.clone(), rig.bone('eye_r').position.clone()];
@@ -65,6 +78,7 @@ export class PokoAnimationController {
 
   attachClips(root: THREE.Object3D, clips: THREE.AnimationClip[]): void {
     this.mixer = new THREE.AnimationMixer(root);
+    this.clipPoseSaved = false; // the saved pose belonged to the procedural bones
     for (const clip of clips) {
       const action = this.mixer.clipAction(clip);
       action.play();
@@ -79,6 +93,7 @@ export class PokoAnimationController {
   }
 
   update(dt: number, time: number, state: PokoAnimState): void {
+    this.restoreClipPose();
     if (this.mixer) {
       for (const action of this.actions.values()) action.setEffectiveWeight(0);
       const idle = this.actions.get('Idle');
@@ -109,7 +124,27 @@ export class PokoAnimationController {
     } else {
       this.proceduralFallback(time, state);
     }
+    this.saveClipPose();
     this.applyLook(dt, state.look);
+  }
+
+  /** Undo last frame's layer 3, so bones the mixer skips hold the clip pose. */
+  private restoreClipPose(): void {
+    if (!this.clipPoseSaved) return;
+    const body = this.rig.bone('body');
+    body.quaternion.copy(this.clipBodyQuat);
+    body.scale.y = this.clipBodyScaleY;
+    this.rig.bone('eye_l').position.copy(this.clipEyePos[0]);
+    this.rig.bone('eye_r').position.copy(this.clipEyePos[1]);
+  }
+
+  private saveClipPose(): void {
+    const body = this.rig.bone('body');
+    this.clipBodyQuat.copy(body.quaternion);
+    this.clipBodyScaleY = body.scale.y;
+    this.clipEyePos[0].copy(this.rig.bone('eye_l').position);
+    this.clipEyePos[1].copy(this.rig.bone('eye_r').position);
+    this.clipPoseSaved = true;
   }
 
   /** Without the GLB: a gentle breath so the voxel character still feels alive. */

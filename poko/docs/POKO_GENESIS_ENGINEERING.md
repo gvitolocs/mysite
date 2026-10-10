@@ -135,14 +135,23 @@ then exactly character space, so animation keys are written in intuitive axes.
 * stages lights and a camera, renders previews with Cycles (`blender/renders`),
   saves `poko_genesis.blend` and exports `blender/exports/poko_raw.glb`.
 
-`npm run poko:pack` then runs **gltfpack** (`-cc -kn -km -kv`) and
-`validate_glb.py`. Two lessons the validator caught:
+`npm run poko:pack` then runs **gltfpack** (`-cc -kn -km -kv -vtf`) and
+`validate_glb.py`. Three lessons, all now checked by the validator:
 
 1. gltfpack drops `TEXCOORD_0` when no texture uses it. `-kv` keeps it, because
    our shader uses UVs procedurally.
 2. Quantisation folds vertex dequantisation into the **inverse bind matrices**.
    The runtime therefore never reuses the GLB's inverse binds for the voxel
    particles; it keeps its own, built in the voxel rest space (`PokoRig.ts`).
+3. gltfpack also quantises UVs and stores their rescale in
+   `KHR_texture_transform`, which lives on textures. Poko has none, so the
+   rescale was silently lost and UVs shrank to 0..0.0625. The bevel shader then
+   treated every pixel as a cube edge: normals tilted up-left, seams vanished,
+   and mesh A rendered flatter, brighter and more orange than voxels B, a
+   visible pop wherever the story swaps representations (the intro → Poko
+   boundary). `-vtf` keeps float UVs (+0.5 KB), and the validator fails on
+   non-float `TEXCOORD_0`. After the fix, A and B render the same frame to
+   within 0.1 of a unit of mean colour.
 
 633 KB raw → 94 KB with meshopt → about 18 KB gzipped on the wire.
 
@@ -156,17 +165,23 @@ then exactly character space, so animation keys are written in intuitive axes.
 |---|---|---|
 | Geometry | 2 116 exposed quads, 4 232 triangles | 4 096 cubes, 49 152 triangles |
 | Skinning | three.js `SkinnedMesh` | bone TRS uniforms in the compute shader |
-| Used when | Poko is whole and still (most of chapters 2 and 8) | awakening, disintegration, every morph |
+| Used when | not drawn by the story: its skeleton and clips drive the bones | every chapter: Poko is one voxel body from first frame to last |
 
 Both use the same bones, the same palette and shade, and the same bevel and
 seam shading, so the swap is invisible. Representation A costs about 1/10 of
 B's vertex work, which is why it is preferred whenever nothing is in flight.
 
+Swapping A in while Poko stood still used to show as a pop (two shaders,
+two silhouettes of the same character). The story now always draws B: the
+camera orbits the voxel Poko like a turntable and the same cubes then come
+apart, so there is no hand-over anywhere. A stays loaded for its rig and
+animation clips (`pokoSkinned` remains as a switch, set false throughout).
+
 ### 3.2 The pool and formations
 
 There is one pool of `POOL_SIZE = 4096` voxels (64 × 64). A **formation** is an
 arrangement of the whole pool: Poko, the halo, the portal, the Pokoin card, the
-CardRail rack, the systems sculpture, the finale. Each is stored as one layer
+CardRails rack, the systems sculpture, the finale. Each is stored as one layer
 of two `DataArrayTexture`s:
 
 ```
@@ -289,11 +304,11 @@ before and after.
 copy) and the WebGL story (progress boundaries):
 
 ```
-awakening 2.0 · disintegration 2.4 · portal 2.0 · pokoin 2.2 · cardrail 2.0 · systems 2.0 · reconstruction 1.8 · finale 1.6   (viewport heights)
+awakening 2.0 · disintegration 2.4 · portal 2.0 · pokoin 2.2 · cardrail 2.0 · prduct 2.0 · tmelnik 2.0 · systems 2.0 · reconstruction 1.8 · finale 1.6   (viewport heights)
 ```
 
-The page is genuinely 16 viewports tall. Scroll progress `u = scrollY /
-(scrollHeight − innerHeight)`; chapter *i* starts at `top_i / (16 − 1)`. The
+The page is genuinely 20 viewports tall. Scroll progress `u = scrollY /
+(scrollHeight − innerHeight)`; chapter *i* starts at `top_i / (20 − 1)`. The
 story is authored per chapter in local time `t ∈ [0, 1]`, so changing a chapter
 length never breaks the script.
 
@@ -323,8 +338,14 @@ effects. Two unit tests protect the contract:
    flowing with progress. Then `stream → portal`: the voxels build twelve
    twisting square frames, nearest first, and the camera flies through. A pixel
    event horizon waits at the far end; crossing it flashes and warps the image.
-4. **Worlds.** `portal → pokoin → cardrail → systems`. Each flight has its own
-   delay axis, arc and a deliberately small swirl. A pivot far from the voxels
+4. **Worlds.** `portal → pokoin → cardrail → prduct → tmelnik → systems`. The
+   prduct pilot is a chair carrying a passport code, five rising stops (one
+   situation each) and the product-data landscape with its PILOT badge; the
+   Tmelnik app is a phone in the app's own theme colours with its four sections,
+   offers drifting off it and a pinned globe. Worlds alternate sides of the
+   path, so each flight's delay axis sweeps from the edge facing the next
+   world. Each flight has its own delay axis, arc and a deliberately small
+   swirl. A pivot far from the voxels
    multiplies the swing by the lever arm, which first sent cubes through the
    camera.
 5. **Reconstruction.** `systems → finale`. Delay is inverted surface depth
@@ -385,6 +406,18 @@ so voxels leaned away from a phantom pointer and the result depended on frame
 history. Now the pointer layer is inert until real input
 (`idleTime = Infinity`), and forward and backward frames are pixel-identical in
 the browser.
+
+A second leak needed a real pointer to show. three.js's `PropertyMixer` writes
+a bone only when the mixed clip value *changed* since the last frame. While
+the clips hold still (end of the intro: look on, idle not yet), the bone kept
+last frame's look rotation and the look layer stacked another on top: Poko
+tipped over (19° → 44° → 69° → 94° in four seconds), and as the look faded out
+the decaying rotations summed to many times the look angle (at 60 fps about
+13×). `PokoAnimationController` now saves the clip pose of everything the look
+layer touches and restores it before the mixer runs, so the layer is
+additive on the clip pose, never on its own output. The e2e test "pointer look
+settles instead of tipping Poko over" holds a real pointer still and fails on
+the old code.
 
 ### 5.4 Keyboard, links, touch
 

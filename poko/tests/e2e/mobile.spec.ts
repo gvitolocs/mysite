@@ -25,7 +25,7 @@ test.describe('mobile (Pixel 7 emulation)', () => {
 
   test('text stays readable over the scene', async ({ page }) => {
     await openExperience(page);
-    await page.evaluate(() => window.__poko.setProgress(0.53));
+    await page.evaluate(() => window.__poko.setProgress(0.42));
     const overlay = page.locator('#pokoin .overlay');
     await expect(overlay).toBeVisible();
     const box = await overlay.boundingBox();
